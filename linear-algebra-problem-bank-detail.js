@@ -376,6 +376,18 @@
     else purpose.insertAdjacentElement("afterend", map);
   });
 
+  [
+    ["#review3", "復習3を解く前に", "区切り方・サイズ・行×列から、Qの逆行列公式の導出まで順に学びます。"],
+    ["#exercise2", "ブロック行列の累乗が不安なとき", "2乗を4か所すべて計算し、3乗で規則を確かめてから帰納法へ進みます。"]
+  ].forEach(([selector, title, description]) => {
+    const head = document.querySelector(`${selector} > .source-head`);
+    if (!head) return;
+    const banner = document.createElement("div");
+    banner.className = "deep-guide-banner";
+    banner.innerHTML = `<strong>${title}</strong><p>${description}</p><a href="linear-algebra-block-matrix-guide.html">ブロック行列を基礎から学ぶ →</a>`;
+    head.append(banner);
+  });
+
   const scrollToCurrentHash = () => {
     if (!window.location.hash) return;
     const target = document.querySelector(window.location.hash);

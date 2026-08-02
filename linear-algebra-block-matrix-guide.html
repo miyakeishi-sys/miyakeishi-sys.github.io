@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ブロック行列を基礎から理解する | 線形代数I</title>
+  <style>
+    :root{color-scheme:light;--bg:#f5f7fa;--paper:#fff;--ink:#17202a;--muted:#617083;--line:#d7dee8;--blue:#245fd1;--teal:#087d70;--amber:#9b5a00;--rose:#aa3157;--soft-blue:#eaf1ff;--soft-teal:#e7f6f3;--soft-amber:#fff4df;--soft-rose:#fdebf1;--shadow:0 8px 24px rgba(23,32,42,.07)}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font-family:"Yu Gothic","Hiragino Kaku Gothic ProN",Meiryo,system-ui,sans-serif;line-height:1.8}a{color:inherit}.topbar{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.96);border-bottom:1px solid var(--line);backdrop-filter:blur(10px)}.topbar-inner{max-width:1260px;margin:auto;padding:10px 20px;display:flex;align-items:center;gap:14px}.back{font-weight:900;color:var(--blue);text-decoration:none}.jump{display:flex;gap:7px;overflow:auto;margin-left:auto}.jump a{white-space:nowrap;text-decoration:none;font-size:13px;border:1px solid var(--line);border-radius:999px;padding:5px 9px;background:#fff}
+    .hero{background:#111925;color:#fff}.hero-inner{max-width:1260px;margin:auto;padding:40px 20px 34px}.eyebrow{font-size:13px;color:#9fc1ff;font-weight:900}.hero h1{font-size:clamp(28px,4vw,42px);line-height:1.3;letter-spacing:0;margin:5px 0 12px}.hero p{max-width:850px;color:#dae4ef;margin:0}.hero-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:17px}.hero-tags span{font-size:13px;border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:5px 9px}
+    .layout{max-width:1260px;margin:auto;padding:24px 20px 70px;display:grid;grid-template-columns:245px minmax(0,1fr);gap:24px}.toc{position:sticky;top:72px;align-self:start;max-height:calc(100vh - 92px);overflow:auto;background:#fff;border:1px solid var(--line);border-radius:8px;padding:14px;box-shadow:var(--shadow)}.toc h2{font-size:15px;margin:0 0 8px}.toc a{display:block;font-size:13px;text-decoration:none;padding:6px 0;border-bottom:1px solid #edf1f5;color:#354256}.toc a:hover{color:var(--blue)}main{min-width:0}.lesson{scroll-margin-top:76px;background:var(--paper);border:1px solid var(--line);border-radius:8px;box-shadow:var(--shadow);margin-bottom:22px;overflow:hidden}.lesson-head{padding:20px 22px;border-bottom:1px solid var(--line)}.lesson-head .num{font-size:12px;font-weight:900;color:var(--blue);background:var(--soft-blue);border-radius:4px;padding:3px 7px}.lesson-head h2{font-size:24px;letter-spacing:0;line-height:1.4;margin:6px 0 4px}.lesson-head p{margin:0;color:var(--muted)}.lesson-body{padding:20px 22px 25px}.lesson-body h3{font-size:17px;letter-spacing:0;margin:24px 0 8px}.lesson-body h3:first-child{margin-top:0}.formula{font-family:Cambria,"Times New Roman",serif;font-size:1.06em}.math{overflow-x:auto;padding:10px 3px;text-align:center}.mathline{display:flex;align-items:center;justify-content:center;gap:10px;min-width:max-content}.mat{--c:2;display:inline-grid;grid-template-columns:repeat(var(--c),minmax(2.2em,auto));gap:4px 11px;position:relative;padding:6px 12px;font-family:Cambria,"Times New Roman",serif;line-height:1.35;text-align:center;vertical-align:middle}.mat::before,.mat::after{content:"";position:absolute;top:1px;bottom:1px;width:7px;border-top:1.5px solid;border-bottom:1.5px solid}.mat::before{left:0;border-left:1.5px solid}.mat::after{right:0;border-right:1.5px solid}.mat.c1{--c:1}.mat.c3{--c:3}.mat.c4{--c:4}.result{font-weight:900;color:#174b9e}
+    .block{display:inline-grid;grid-template-columns:repeat(2,minmax(6em,auto));border:2px solid #263448;background:#fff;font-family:Cambria,"Times New Roman",serif;text-align:center}.block>span{padding:10px 14px;border-right:1px dashed #718096;border-bottom:1px dashed #718096}.block>span:nth-child(2n){border-right:0}.block>span:nth-last-child(-n+2){border-bottom:0}.block .a{background:#eaf1ff}.block .b{background:#e7f6f3}.block .c{background:#fff4df}.block .o{background:#f1f3f6;color:#657083}.size-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.size-card{border:1px solid var(--line);border-left:4px solid var(--blue);padding:12px 14px;background:#fafbfd}.size-card strong{display:block}.size-card p{margin:3px 0 0;color:var(--muted);font-size:14px}.callout{margin:14px 0;padding:12px 14px;border-left:4px solid var(--teal);background:var(--soft-teal)}.callout strong{color:#075e56}.callout p{margin:3px 0}.callout.warn{border-color:var(--rose);background:var(--soft-rose)}.callout.warn strong{color:#8b284a}.callout.exam{border-color:var(--amber);background:var(--soft-amber)}.callout.exam strong{color:#7d4900}
+    .steps{counter-reset:step;display:grid;gap:10px}.step{position:relative;border:1px solid #e0e6ef;border-radius:6px;background:#fafbfd;padding:12px 13px 12px 49px}.step::before{counter-increment:step;content:counter(step);position:absolute;left:13px;top:12px;width:25px;height:25px;display:grid;place-items:center;border-radius:50%;background:var(--blue);color:#fff;font-size:12px;font-weight:900}.reason{display:block;margin-top:4px;color:#576579;font-size:14px}.reason::before{content:"なぜ？ ";font-weight:900;color:var(--teal)}.dimension-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}.dimension-table th,.dimension-table td{padding:9px 11px;border:1px solid var(--line);text-align:left}.dimension-table th{background:#f0f4f9}.flow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:14px 0}.flow>div{position:relative;border:1px solid var(--line);border-top:4px solid var(--blue);padding:11px 12px;background:#fff}.flow strong{display:block;font-size:13px}.flow p{margin:4px 0 0;font-size:14px;color:var(--muted)}details.check{border:1px solid var(--line);border-radius:7px;margin:10px 0;overflow:hidden}details.check summary{cursor:pointer;list-style:none;font-weight:900;background:#f8fafc;padding:12px 42px 12px 14px;position:relative}details.check summary::after{content:"＋";position:absolute;right:14px;color:var(--blue)}details.check[open] summary::after{content:"－"}.check-body{padding:14px 16px;border-top:1px solid var(--line)}.check-body p{margin:5px 0}.footer{font-size:13px;color:var(--muted);margin-top:25px}
+    @media(max-width:850px){.layout{grid-template-columns:1fr}.toc{position:static;max-height:none}.jump{display:none}.size-grid,.flow{grid-template-columns:1fr}.lesson-head,.lesson-body{padding-left:16px;padding-right:16px}.block{grid-template-columns:repeat(2,minmax(5em,auto))}.block>span{padding:9px}.mat{gap:3px 7px;padding-left:9px;padding-right:9px}}
+  </style>
+</head>
+<body>
+  <div class="topbar"><div class="topbar-inner"><a class="back" href="linear-algebra-problem-bank.html#review3">← 全課題・演習問題集へ</a><nav class="jump"><a href="#meaning">意味</a><a href="#multiply">掛け算</a><a href="#four-types">4つの基本型</a><a href="#inverse">逆行列</a><a href="#power">累乗</a></nav></div></div>
+  <header class="hero"><div class="hero-inner"><div class="eyebrow">LINEAR ALGEBRA I / BLOCK MATRICES</div><h1>ブロック行列を基礎から理解する</h1><p>ブロック行列は新しい掛け算ではありません。大きな行列を小さな長方形に区切り、その長方形を「1つの成分」のように見て、いつもの行×列を行う方法です。区切りとサイズから、一緒にゆっくり確認します。</p><div class="hero-tags"><span>前提知識から説明</span><span>サイズを毎回表示</span><span>公式を導出</span><span>答案例つき</span></div></div></header>
+  <div class="layout">
+    <aside class="toc"><h2>このページの目次</h2><a href="#meaning">1. ブロックとは</a><a href="#sizes">2. サイズの読み方</a><a href="#multiply">3. 掛け算の原理</a><a href="#four-types">4. 復習3 問1</a><a href="#inverse">5. 復習3 問2</a><a href="#power">6. 演習2 累乗</a><a href="#mistakes">7. ミス対策</a><a href="#practice">8. 確認問題</a></aside>
+    <main>
+      <section class="lesson" id="meaning"><div class="lesson-head"><span class="num">01</span><h2>そもそも「ブロック」とは何か</h2><p>数が並んだ大きな行列に、縦線と横線を引いてできる長方形です。</p></div><div class="lesson-body">
+        <p>例えば4×4行列を「上2行・下2行」「左2列・右2列」で区切ると、4個の2×2行列として見られます。</p>
+        <div class="math"><div class="mathline"><span class="block"><span class="a">A</span><span class="c">C</span><span class="o">O</span><span class="b">B</span></span></div></div>
+        <p>この表示は、元の4×4行列の成分を消したわけではありません。A、C、O、Bの中には、それぞれ2行2列の数が入っています。</p>
+        <div class="callout"><strong>最初に覚えること</strong><p>ブロック行列は「行列を別の行列へ変える操作」ではなく、「同じ行列を見やすくまとめる表記」です。</p></div>
+        <h3>高校数学とのつながり</h3><p>普通の2×2行列では、各マスに数が入っていました。</p><div class="math"><div class="mathline"><span class="mat"><span>a</span><span>b</span><span>c</span><span>d</span></span></div></div><p>ブロック行列では、各マスに数の代わりに行列が入ります。ただし、行列は大きさをもつため、好き勝手には掛けられません。</p>
+      </div></section>
+
+      <section class="lesson" id="sizes"><div class="lesson-head"><span class="num">02</span><h2>区切る前にサイズを読む</h2><p>ブロック行列で最も大切なのは計算力より、各ブロックの行数と列数です。</p></div><div class="lesson-body">
+        <p>Aをm×m、Cをm×n、Oをn×m、Bをn×nとします。</p>
+        <div class="math"><div class="mathline"><span class="block"><span class="a">A<br><small>m×m</small></span><span class="c">C<br><small>m×n</small></span><span class="o">O<br><small>n×m</small></span><span class="b">B<br><small>n×n</small></span></span></div></div>
+        <table class="dimension-table"><tr><th>位置</th><th>なぜそのサイズか</th></tr><tr><td>上段 A, C</td><td>同じ行ブロックにあるので、どちらもm行</td></tr><tr><td>下段 O, B</td><td>同じ行ブロックにあるので、どちらもn行</td></tr><tr><td>左列 A, O</td><td>同じ列ブロックにあるので、どちらもm列</td></tr><tr><td>右列 C, B</td><td>同じ列ブロックにあるので、どちらもn列</td></tr></table>
+        <p>したがって全体は、行数 <span class="formula">m+n</span>、列数 <span class="formula">m+n</span> の正方行列です。</p>
+        <div class="callout warn"><strong>Oのサイズは文脈で決まる</strong><p>Oは単なる数字0ではなく零行列です。上の左下にあるOはn×mです。問題文にサイズが書かれていなくても、周囲のブロックから逆算します。</p></div>
+      </div></section>
+
+      <section class="lesson" id="multiply"><div class="lesson-head"><span class="num">03</span><h2>ブロック行列の掛け算</h2><p>普通の2×2行列と同じ「行×列」です。順番は絶対に変えません。</p></div><div class="lesson-body">
+        <h3>まず数の2×2行列</h3>
+        <div class="math"><div class="mathline"><span class="mat"><span>a</span><span>b</span><span>c</span><span>d</span></span><span class="mat"><span>p</span><span>q</span><span>r</span><span>s</span></span><span>=</span><span class="mat"><span>ap+br</span><span>aq+bs</span><span>cp+dr</span><span>cq+ds</span></span></div></div>
+        <p>左上は「左の第1行」と「右の第1列」から <span class="formula">ap+br</span> です。</p>
+        <h3>文字を行列ブロックへ置き換える</h3>
+        <div class="math"><div class="mathline"><span class="block"><span>A</span><span>C</span><span>D</span><span>B</span></span><span class="block"><span>P</span><span>Q</span><span>R</span><span>S</span></span><span>=</span><span class="block"><span>AP+CR</span><span>AQ+CS</span><span>DP+BR</span><span>DQ+BS</span></span></div></div>
+        <div class="steps"><div class="step">答えの左上を指で隠さずに見る。左の上段 <span class="formula">[A C]</span> と右の左列 <span class="formula">[P R]ᵀ</span> を使う。<span class="reason">普通の行列積の第(1,1)成分と同じ位置だから。</span></div><div class="step">順番を保って <span class="formula">AP+CR</span> と書く。<span class="reason">一般にAPとPAは別物であり、交換してはいけないから。</span></div><div class="step">残り3か所も同じ行×列で埋める。<span class="reason">ブロックごとに計算しても、元の各成分について行列積を行った結果と一致するから。</span></div></div>
+        <div class="callout exam"><strong>掛ける前の安全確認</strong><p>各積AP、CRなどが定義でき、さらにAPとCRが同じサイズで足せることを確認します。区切りが対応していない場合、その分け方のままではブロック積を計算できません。</p></div>
+      </div></section>
+
+      <section class="lesson" id="four-types"><div class="lesson-head"><span class="num">04</span><h2>復習3 問1を一問ずつ解く</h2><p>見た目の違う4問も、すべて行×列の1つの原理で解けます。</p></div><div class="lesson-body">
+        <h3>(1) 列ブロック × 行ブロック</h3>
+        <div class="math"><div class="mathline"><span class="mat c1"><span>a₁</span><span>a₂</span><span>a₃</span></span><span class="mat c4"><span>b₁</span><span>b₂</span><span>b₃</span><span>b₄</span></span></div></div>
+        <p>aᵢは1×n行ベクトル、bⱼはn×1列ベクトルです。したがって <span class="formula">aᵢbⱼ</span> は1×1、つまり数です。</p>
+        <div class="steps"><div class="step">答えの行数は左のブロック列の3、列数は右のブロック行の4。したがって3×4ブロックになる。</div><div class="step">第(2,3)ブロックなら、左の第2行a₂と右の第3列b₃を掛けてa₂b₃。</div><div class="step">同じ規則で12か所を埋める。</div></div>
+        <div class="math"><div class="mathline"><span class="mat c4"><span>a₁b₁</span><span>a₁b₂</span><span>a₁b₃</span><span>a₁b₄</span><span>a₂b₁</span><span>a₂b₂</span><span>a₂b₃</span><span>a₂b₄</span><span>a₃b₁</span><span>a₃b₂</span><span>a₃b₃</span><span>a₃b₄</span></span></div></div>
+
+        <h3>(2) 上三角ブロック同士</h3>
+        <div class="math"><div class="mathline"><span class="mat"><span>a</span><span>b</span><span>O</span><span>C</span></span><span class="mat"><span>a′</span><span>b′</span><span>O</span><span>C′</span></span></div></div>
+        <div class="steps"><div class="step">左上: <span class="formula">aa′+bO=aa′</span>。<span class="reason">零ブロックを掛けた項は零になる。</span></div><div class="step">右上: <span class="formula">ab′+bC′</span>。<span class="reason">左の上段と右の右列を、その順番で掛ける。</span></div><div class="step">左下: <span class="formula">Oa′+CO=O</span>。右下: <span class="formula">Ob′+CC′=CC′</span>。</div></div>
+        <div class="math"><div class="mathline"><span class="result">答え</span><span class="mat"><span>aa′</span><span>ab′+bC′</span><span>O</span><span>CC′</span></span></div></div>
+
+        <h3>(3) 係数を使って列を作る</h3>
+        <p>第1列は <span class="formula">α₁,α₂,α₃</span> を係数として、a,b,cを足します。第2列も同様です。</p>
+        <div class="math"><div class="mathline"><span class="mat c3"><span>a</span><span>b</span><span>c</span></span><span class="mat"><span>α₁</span><span>β₁</span><span>α₂</span><span>β₂</span><span>α₃</span><span>β₃</span></span><span>=</span><span class="mat"><span>α₁a+α₂b+α₃c</span><span>β₁a+β₂b+β₃c</span></span></div></div>
+
+        <h3>(4) Aを各列へ掛ける</h3>
+        <p><span class="formula">A[a b c]</span> の第1列はAa、第2列はAb、第3列はAcです。</p>
+        <div class="math"><div class="mathline"><span>A</span><span class="mat c3"><span>a</span><span>b</span><span>c</span></span><span>=</span><span class="mat c3"><span>Aa</span><span>Ab</span><span>Ac</span></span></div></div>
+        <div class="callout"><strong>ここでの本質</strong><p>行列Aを左から掛けることは、その行列の各列ベクトルへ同じ線形変換Aを施すことです。</p></div>
+      </div></section>
+
+      <section class="lesson" id="inverse"><div class="lesson-head"><span class="num">05</span><h2>復習3 問2: Qの逆行列を基礎から</h2><p>公式を暗記せず、積が単位行列になる条件から導きます。</p></div><div class="lesson-body">
+        <h3>1. 4×4行列を2×2ブロックへ分ける</h3>
+        <div class="math"><div class="mathline"><span>Q=</span><span class="mat c4"><span>4</span><span>5</span><span>1</span><span>−2</span><span>2</span><span>2</span><span>4</span><span>3</span><span>0</span><span>0</span><span>2</span><span>1</span><span>0</span><span>0</span><span>3</span><span>1</span></span><span>=</span><span class="block"><span class="a">A</span><span class="c">C</span><span class="o">O</span><span class="b">B</span></span></div></div>
+        <div class="size-grid"><div class="size-card"><strong>A</strong><div class="math"><div class="mathline"><span class="mat"><span>4</span><span>5</span><span>2</span><span>2</span></span></div></div></div><div class="size-card"><strong>C</strong><div class="math"><div class="mathline"><span class="mat"><span>1</span><span>−2</span><span>4</span><span>3</span></span></div></div></div><div class="size-card"><strong>O</strong><div class="math"><div class="mathline"><span class="mat"><span>0</span><span>0</span><span>0</span><span>0</span></span></div></div></div><div class="size-card"><strong>B</strong><div class="math"><div class="mathline"><span class="mat"><span>2</span><span>1</span><span>3</span><span>1</span></span></div></div></div></div>
+        <h3>2. 逆行列の形を予想する</h3>
+        <p>Qが上三角ブロックなので、逆行列も次の上三角ブロックの形に置きます。</p><div class="math"><div class="mathline"><span class="mat"><span>X</span><span>Y</span><span>O</span><span>Z</span></span></div></div>
+        <div class="math"><div class="mathline"><span class="mat"><span>A</span><span>C</span><span>O</span><span>B</span></span><span class="mat"><span>X</span><span>Y</span><span>O</span><span>Z</span></span><span>=</span><span class="mat"><span>E</span><span>O</span><span>O</span><span>E</span></span></div></div>
+        <div class="steps"><div class="step">左上を比較: <span class="formula">AX=E</span> より <span class="formula">X=A⁻¹</span>。</div><div class="step">右下を比較: <span class="formula">BZ=E</span> より <span class="formula">Z=B⁻¹</span>。</div><div class="step">右上を比較: <span class="formula">AY+CZ=O</span>。Z=B⁻¹を入れ、左からA⁻¹を掛けると <span class="formula">Y=−A⁻¹CB⁻¹</span>。</div></div>
+        <div class="math"><div class="mathline"><span class="result">導いた公式</span><span class="mat"><span>A⁻¹</span><span>−A⁻¹CB⁻¹</span><span>O</span><span>B⁻¹</span></span></div></div>
+        <h3>3. A⁻¹とB⁻¹を計算する</h3>
+        <div class="math"><div class="mathline"><span>A⁻¹=</span><span class="mat"><span>−1</span><span>5/2</span><span>1</span><span>−2</span></span><span>, B⁻¹=</span><span class="mat"><span>−1</span><span>1</span><span>3</span><span>−2</span></span></div></div>
+        <h3>4. 最も間違えやすい右上を、順番どおり計算する</h3>
+        <p>行列積の順番は変えられないので、まず <span class="formula">CB⁻¹</span>、次に <span class="formula">A⁻¹(CB⁻¹)</span> と計算します。</p>
+        <div class="math"><div class="mathline"><span>CB⁻¹=</span><span class="mat"><span>−7</span><span>5</span><span>5</span><span>−2</span></span></div></div>
+        <div class="math"><div class="mathline"><span>A⁻¹CB⁻¹=</span><span class="mat"><span>39/2</span><span>−10</span><span>−17</span><span>9</span></span><span>,　−A⁻¹CB⁻¹=</span><span class="mat"><span>−39/2</span><span>10</span><span>17</span><span>−9</span></span></div></div>
+        <h3>5. 4×4へ戻す</h3>
+        <div class="math"><div class="mathline"><span class="result">Q⁻¹=</span><span class="mat c4"><span>−1</span><span>5/2</span><span>−39/2</span><span>10</span><span>1</span><span>−2</span><span>17</span><span>−9</span><span>0</span><span>0</span><span>−1</span><span>1</span><span>0</span><span>0</span><span>3</span><span>−2</span></span></div></div>
+        <div class="callout exam"><strong>答案で省かない箇所</strong><p>Qをどの4ブロックへ分けたか、公式の右上にマイナスが付く理由、CB⁻¹とA⁻¹CB⁻¹の途中行列を書きます。</p></div>
+      </div></section>
+
+      <section class="lesson" id="power"><div class="lesson-head"><span class="num">06</span><h2>演習2 問4: ブロック行列のk乗</h2><p>いきなり帰納法を書かず、まず2乗・3乗から規則を見つけます。</p></div><div class="lesson-body">
+        <div class="math"><div class="mathline"><span>M=</span><span class="mat"><span>Eₘ</span><span>A</span><span>O</span><span>Eₙ</span></span></div></div>
+        <p>Aはm×n、Oはn×mです。したがってM全体は(m+n)次正方行列で、M²を定義できます。</p>
+        <h3>2乗を4か所すべて計算する</h3>
+        <div class="math"><div class="mathline"><span>M²=</span><span class="mat"><span>EₘEₘ+AO</span><span>EₘA+AEₙ</span><span>OEₘ+EₙO</span><span>OA+EₙEₙ</span></span><span>=</span><span class="mat"><span>Eₘ</span><span>2A</span><span>O</span><span>Eₙ</span></span></div></div>
+        <div class="callout"><strong>なぜ右上だけ2Aになるか</strong><p>単位行列は掛けた行列を変えないので、EₘA=A、AEₙ=Aです。右上にはAが2個足されます。</p></div>
+        <h3>3乗で予想を確かめる</h3>
+        <div class="math"><div class="mathline"><span>M³=M²M=</span><span class="mat"><span>Eₘ</span><span>2A</span><span>O</span><span>Eₙ</span></span><span class="mat"><span>Eₘ</span><span>A</span><span>O</span><span>Eₙ</span></span><span>=</span><span class="mat"><span>Eₘ</span><span>3A</span><span>O</span><span>Eₙ</span></span></div></div>
+        <p>ここから次の形を予想できます。</p><div class="math"><div class="mathline"><span>Mᵏ=</span><span class="mat"><span>Eₘ</span><span>kA</span><span>O</span><span>Eₙ</span></span></div></div>
+        <h3>帰納法で証明する</h3>
+        <div class="steps"><div class="step"><strong>k=1</strong>: 予想した式はMそのものなので成立。</div><div class="step"><strong>帰納法の仮定</strong>: あるkで、対角ブロックがEₘ,Eₙ、右上ブロックがkA、左下ブロックがOの形になると仮定する。</div><div class="step"><strong>k+1を計算</strong>: Mᵏの右からMを掛ける。右上は <span class="formula">EₘA+kAEₙ=A+kA=(k+1)A</span>。</div><div class="step"><strong>結論</strong>: k+1でも同じ形が成り立つので、すべての正整数kで成立。</div></div>
+        <div class="math"><div class="mathline"><span class="result">Mᵏ=</span><span class="mat"><span>Eₘ</span><span>kA</span><span>O</span><span>Eₙ</span></span></div></div>
+      </div></section>
+
+      <section class="lesson" id="mistakes"><div class="lesson-head"><span class="num">07</span><h2>よくあるミスを先に防ぐ</h2><p>計算前の確認だけで、多くの失点を避けられます。</p></div><div class="lesson-body"><div class="flow"><div><strong>区切りを確認</strong><p>左右の行列で、掛け算に使う内側の区切りが一致しているか。</p></div><div><strong>順番を固定</strong><p>ABをBAへ変えない。公式も文字の順に読む。</p></div><div><strong>Oのサイズを確認</strong><p>零行列は場所ごとに行数・列数が違う。</p></div></div>
+        <table class="dimension-table"><tr><th>誤り</th><th>正しい考え方</th></tr><tr><td>−A⁻¹CB⁻¹を−B⁻¹CA⁻¹にする</td><td>行列積は交換不可。導出した順番を保つ</td></tr><tr><td>ブロックごとに勝手な大きさで区切る</td><td>同じ行ブロックは行数、同じ列ブロックは列数をそろえる</td></tr><tr><td>Oを数の0として扱う</td><td>Oは必要なサイズの零行列。掛け算可能性を確認する</td></tr><tr><td>累乗公式をいきなり書く</td><td>まずM²を4ブロックすべて計算し、規則を発見する</td></tr></table>
+      </div></section>
+
+      <section class="lesson" id="practice"><div class="lesson-head"><span class="num">08</span><h2>自分で確かめる小問</h2><p>答えを開く前に、各ブロックのサイズと最初の1か所を書いてください。</p></div><div class="lesson-body">
+        <details class="check"><summary>確認1: 下三角ブロック同士の積</summary><div class="check-body"><div class="math"><div class="mathline"><span class="mat"><span>A</span><span>O</span><span>C</span><span>B</span></span><span class="mat"><span>P</span><span>O</span><span>R</span><span>S</span></span></div></div><p>を計算する。</p><div class="math"><div class="mathline"><span class="result">答え</span><span class="mat"><span>AP</span><span>O</span><span>CP+BR</span><span>BS</span></span></div></div><p>右上がOのまま残ることを、行×列で確認してください。</p></div></details>
+        <details class="check"><summary>確認2: 逆行列公式を掛けて検算</summary><div class="check-body"><div class="math"><div class="mathline"><span class="mat"><span>A</span><span>C</span><span>O</span><span>B</span></span><span class="mat"><span>A⁻¹</span><span>−A⁻¹CB⁻¹</span><span>O</span><span>B⁻¹</span></span></div></div><p>を掛ける。右上は <span class="formula">A(−A⁻¹CB⁻¹)+CB⁻¹=−CB⁻¹+CB⁻¹=O</span>。他の3か所もE,O,O,Eとなります。</p></div></details>
+        <details class="check"><summary>確認3: M⁵の右上ブロック</summary><div class="check-body"><p>対角ブロックがEₘ,Eₙ、右上がA、左下がOであるMについて、公式へk=5を代入する。</p><div class="math"><div class="mathline"><span class="result">M⁵=</span><span class="mat"><span>Eₘ</span><span>5A</span><span>O</span><span>Eₙ</span></span></div></div></div></details>
+        <p class="footer">元の問題と提出答案例は、全課題・演習問題集の「復習3」と「演習2 問4」にあります。</p>
+      </div></section>
+    </main>
+  </div>
+</body>
+</html>
