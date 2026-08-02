@@ -1,0 +1,2190 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>線形代数I 講義資料まとめ</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f6f8fb;
+      --paper: #ffffff;
+      --ink: #17202a;
+      --muted: #637083;
+      --line: #d8dee8;
+      --blue: #2f6fed;
+      --teal: #138a7e;
+      --amber: #b56b00;
+      --rose: #b8325f;
+      --green: #217a3c;
+      --soft-blue: #eaf1ff;
+      --soft-teal: #e8f6f3;
+      --soft-amber: #fff4df;
+      --soft-rose: #fdebf2;
+      --soft-green: #eaf7ee;
+      --shadow: 0 10px 28px rgba(23, 32, 42, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: "Yu Gothic", "Hiragino Kaku Gothic ProN", Meiryo, system-ui, sans-serif;
+      line-height: 1.75;
+      color: var(--ink);
+      background: var(--bg);
+    }
+
+    a { color: inherit; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(10px);
+    }
+
+    .topbar-inner {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      letter-spacing: 0;
+      white-space: nowrap;
+    }
+
+    .mark {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--ink);
+      border-radius: 8px;
+      background: linear-gradient(135deg, #fff, #eaf1ff);
+      font-weight: 900;
+    }
+
+    .jump-strip {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+    }
+
+    .jump-strip a,
+    .pill {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+      padding: 6px 10px;
+      font-size: 13px;
+      line-height: 1.2;
+      color: #344055;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .jump-strip a:hover { border-color: var(--blue); color: var(--blue); }
+
+    .hero {
+      background: #101722;
+      color: #fff;
+      border-bottom: 1px solid #0f1827;
+    }
+
+    .hero-inner {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 42px 20px 34px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(300px, 0.9fr);
+      gap: 28px;
+      align-items: center;
+    }
+
+    h1 {
+      margin: 0 0 14px;
+      font-size: 34px;
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      margin: 0;
+      color: #d9e3f0;
+      font-size: 16px;
+      max-width: 760px;
+    }
+
+    .source-note {
+      margin-top: 18px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      color: #d8e2f0;
+    }
+
+    .hero-visual {
+      min-height: 260px;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-radius: 8px;
+      background: #f7fbff;
+      box-shadow: var(--shadow);
+      padding: 12px;
+    }
+
+    .page {
+      max-width: 1240px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 270px minmax(0, 1fr);
+      gap: 26px;
+      padding: 24px 20px 56px;
+    }
+
+    .toc {
+      position: sticky;
+      top: 72px;
+      align-self: start;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+      box-shadow: var(--shadow);
+      padding: 16px;
+      max-height: calc(100vh - 90px);
+      overflow: auto;
+    }
+
+    .toc h2 {
+      margin: 0 0 10px;
+      font-size: 15px;
+    }
+
+    .toc a {
+      display: block;
+      padding: 7px 0;
+      color: #344055;
+      text-decoration: none;
+      border-bottom: 1px solid #eef2f7;
+      font-size: 14px;
+    }
+
+    .toc a:hover { color: var(--blue); }
+
+    main { min-width: 0; }
+
+    section {
+      scroll-margin-top: 84px;
+      margin-bottom: 24px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .section-head {
+      padding: 22px 24px;
+      border-bottom: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .section-head h2 {
+      margin: 0 0 8px;
+      font-size: 24px;
+      line-height: 1.35;
+      letter-spacing: 0;
+    }
+
+    .section-head p { margin: 0; color: var(--muted); }
+
+    .section-body { padding: 22px 24px 26px; }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      align-items: start;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      align-items: stretch;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      padding: 16px;
+    }
+
+    .panel h3,
+    .panel h4 {
+      margin: 0 0 8px;
+      font-size: 16px;
+      line-height: 1.45;
+    }
+
+    .panel p { margin: 0 0 10px; }
+    .panel p:last-child { margin-bottom: 0; }
+
+    .terms { background: var(--soft-blue); border-color: #c7d8ff; }
+    .intuition { background: var(--soft-teal); border-color: #bfe5df; }
+    .warning { background: var(--soft-amber); border-color: #f2d49a; }
+    .practice { background: var(--soft-green); border-color: #bfe3ca; }
+    .supplement { background: var(--soft-rose); border-color: #f4bfd1; }
+    .example { background: #fff; border-color: #cfd8e5; }
+    .think { background: #f4f7fb; border-color: #c9d4e3; }
+    .proof { background: #f7fbff; border-color: #bdd0ec; }
+    .exam { background: #fff8e9; border-color: #edcd8a; }
+    .mistake { background: #fff1f1; border-color: #e7b4b4; }
+
+    .example h3::before {
+      content: "例 ";
+      color: var(--blue);
+      font-weight: 900;
+    }
+
+    .think h3::before {
+      content: "考える ";
+      color: var(--rose);
+      font-weight: 900;
+    }
+
+    .proof h3::before {
+      content: "背景 ";
+      color: var(--teal);
+      font-weight: 900;
+    }
+
+    .exam h3::before {
+      content: "テスト ";
+      color: var(--amber);
+      font-weight: 900;
+    }
+
+    .mistake h3::before {
+      content: "注意 ";
+      color: var(--rose);
+      font-weight: 900;
+    }
+
+    .answer-line {
+      border-top: 1px dashed #b9c5d5;
+      margin-top: 10px;
+      padding-top: 10px;
+      color: #344055;
+    }
+
+    .why {
+      border-left: 4px solid var(--teal);
+      padding: 10px 12px;
+      background: #f7fcfb;
+      margin-top: 10px;
+      border-radius: 0 8px 8px 0;
+    }
+
+    .importance {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin: 16px 0;
+    }
+
+    .rank {
+      border: 1px solid var(--line);
+      border-left-width: 6px;
+      border-radius: 8px;
+      padding: 12px 14px;
+      background: #fff;
+    }
+
+    .rank strong {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+
+    .rank.core { border-left-color: var(--rose); }
+    .rank.important { border-left-color: var(--amber); }
+    .rank.extra { border-left-color: var(--teal); }
+
+    ul, ol { padding-left: 1.35em; margin: 8px 0 0; }
+    li + li { margin-top: 5px; }
+
+    code,
+    .formula {
+      font-family: Consolas, "Courier New", monospace;
+      background: #f0f3f8;
+      border: 1px solid #dce3ec;
+      border-radius: 6px;
+      padding: 1px 5px;
+      white-space: normal;
+    }
+
+    .formula-block {
+      display: block;
+      overflow-x: auto;
+      margin: 10px 0;
+      padding: 12px;
+      border: 1px solid #dce3ec;
+      border-radius: 8px;
+      background: #f8fafc;
+      font-family: Consolas, "Courier New", monospace;
+      line-height: 1.55;
+    }
+
+    .math-display {
+      overflow-x: auto;
+      margin: 12px 0;
+      padding: 12px;
+      border: 1px solid #dce3ec;
+      border-radius: 8px;
+      background: #f8fafc;
+      font-family: Consolas, "Courier New", monospace;
+    }
+
+    .math-line {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 8px 0;
+      min-width: max-content;
+    }
+
+    .matrix {
+      --cols: 2;
+      display: inline-grid;
+      grid-template-columns: repeat(var(--cols), minmax(34px, auto));
+      gap: 4px 12px;
+      padding: 7px 11px;
+      border-left: 2px solid #17202a;
+      border-right: 2px solid #17202a;
+      border-radius: 8px;
+      background: #fff;
+      text-align: center;
+      line-height: 1.35;
+    }
+
+    .matrix.col { --cols: 1; }
+    .matrix .wide { min-width: 70px; }
+
+    .math-note {
+      margin-top: 8px;
+      color: var(--muted);
+      font-family: "Yu Gothic", "Hiragino Kaku Gothic ProN", Meiryo, system-ui, sans-serif;
+      font-size: 13px;
+    }
+
+    .definition-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .definition-item {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      padding: 13px 14px;
+    }
+
+    .definition-item strong {
+      display: block;
+      margin-bottom: 4px;
+      color: #142033;
+    }
+
+    .problem-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      padding: 18px;
+      margin-top: 16px;
+    }
+
+    .problem-card h3 {
+      margin-bottom: 6px;
+      font-size: 18px;
+    }
+
+    .source-badge {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      margin-bottom: 10px;
+      border: 1px solid #d7c188;
+      border-radius: 999px;
+      background: #fff8e9;
+      color: #704800;
+      padding: 3px 9px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .solution-flow {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .solution-flow .step {
+      background: #fbfdff;
+    }
+
+    .wide-panel {
+      margin-top: 16px;
+    }
+
+    .figure {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfdff;
+      padding: 12px;
+      margin: 12px 0;
+    }
+
+    .figure svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .caption {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .mini-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    .mini-table th,
+    .mini-table td {
+      border: 1px solid var(--line);
+      padding: 8px 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .mini-table th { background: #f2f6fb; }
+
+    .steps {
+      counter-reset: step;
+      display: grid;
+      gap: 10px;
+      margin: 12px 0 0;
+    }
+
+    .step {
+      position: relative;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      padding: 12px 12px 12px 48px;
+    }
+
+    .step::before {
+      counter-increment: step;
+      content: counter(step);
+      position: absolute;
+      left: 12px;
+      top: 13px;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: var(--ink);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .checklist {
+      display: grid;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .check {
+      display: grid;
+      grid-template-columns: 24px 1fr;
+      gap: 8px;
+      align-items: start;
+    }
+
+    .check span:first-child {
+      width: 20px;
+      height: 20px;
+      border-radius: 5px;
+      display: grid;
+      place-items: center;
+      background: #eaf7ee;
+      color: var(--green);
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    details {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      padding: 10px 12px;
+      margin-top: 10px;
+    }
+
+    summary {
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .tag {
+      border-radius: 999px;
+      padding: 4px 9px;
+      background: #eef2f7;
+      color: #3a485b;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--line);
+      margin: 18px 0;
+    }
+
+    .footer-note {
+      color: var(--muted);
+      font-size: 13px;
+      margin: 18px 0 0;
+    }
+
+    @media (max-width: 980px) {
+      .hero-inner,
+      .page {
+        grid-template-columns: 1fr;
+      }
+
+      .toc {
+        position: static;
+        max-height: none;
+      }
+
+      .grid-2,
+      .grid-3 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .topbar-inner {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .hero-inner {
+        padding: 30px 16px 24px;
+      }
+
+      .page { padding: 16px 12px 40px; }
+      h1 { font-size: 27px; }
+      .section-head,
+      .section-body { padding-left: 16px; padding-right: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand"><span class="mark">LA</span><span>線形代数I まとめ</span></div>
+      <nav class="jump-strip" aria-label="主要テーマ">
+        <a href="#map">全体像</a>
+        <a href="#definitions">新出定義</a>
+        <a href="#vectors">数ベクトル</a>
+        <a href="#subspace">部分空間</a>
+        <a href="#independence">一次独立</a>
+        <a href="#basis">基底・次元</a>
+        <a href="#matrix">行列</a>
+        <a href="#inverse">逆行列</a>
+        <a href="#row-reduction">基本変形</a>
+        <a href="#systems">連立方程式</a>
+        <a href="#determinant">行列式</a>
+        <a href="#report-practice">レポート型問題</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="hero">
+    <div class="hero-inner">
+      <div>
+        <h1>線形代数Iの講義資料を、勉強用に読み替えるサイト</h1>
+        <p class="lead">
+          講義PDFの流れに沿って、重要度・用語・直感・計算手順・図解をまとめ直したページです。
+          抽象概念は「何を見ているのか」を先に説明し、計算分野は手順で迷わないように整理しています。
+        </p>
+        <div class="source-note">
+          <span class="pill">中心資料: 線形代数I(2026年前期)</span>
+          <span class="pill">補助: 復習・レポート解答例</span>
+          <span class="pill">対象: 高校数学から大学線形代数への橋渡し</span>
+        </div>
+      </div>
+      <div class="hero-visual" aria-label="線形代数の全体図">
+        <svg viewBox="0 0 640 360" role="img">
+          <defs>
+            <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#17202a"></path>
+            </marker>
+          </defs>
+          <rect x="20" y="20" width="600" height="320" rx="8" fill="#fff" stroke="#ccd6e3"></rect>
+          <line x1="82" y1="280" x2="285" y2="90" stroke="#2f6fed" stroke-width="5" marker-end="url(#arrow)"></line>
+          <line x1="82" y1="280" x2="392" y2="230" stroke="#138a7e" stroke-width="5" marker-end="url(#arrow)"></line>
+          <line x1="82" y1="280" x2="210" y2="204" stroke="#b8325f" stroke-width="5" marker-end="url(#arrow)"></line>
+          <path d="M 330 90 L 520 126 L 470 280 L 270 246 Z" fill="#eaf1ff" stroke="#2f6fed" stroke-width="2"></path>
+          <circle cx="82" cy="280" r="6" fill="#17202a"></circle>
+          <text x="70" y="305" font-size="20" fill="#17202a">0</text>
+          <text x="300" y="86" font-size="18" fill="#2f6fed">ベクトル</text>
+          <text x="405" y="226" font-size="18" fill="#138a7e">生成</text>
+          <text x="382" y="166" font-size="18" fill="#17202a">部分空間</text>
+          <text x="78" y="48" font-size="19" fill="#17202a">行列 = ベクトルを動かす道具</text>
+          <g transform="translate(430 34)">
+            <rect x="0" y="0" width="120" height="88" rx="6" fill="#fff4df" stroke="#e0b56c"></rect>
+            <text x="20" y="28" font-size="18" fill="#17202a">A x = b</text>
+            <text x="14" y="58" font-size="14" fill="#637083">連立方程式</text>
+          </g>
+          <g transform="translate(72 78)">
+            <rect x="0" y="0" width="124" height="70" rx="6" fill="#eaf7ee" stroke="#9ed0ac"></rect>
+            <text x="18" y="28" font-size="17" fill="#17202a">det A</text>
+            <text x="18" y="52" font-size="13" fill="#637083">面積・体積倍率</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <div class="page">
+    <aside class="toc" aria-label="目次">
+      <h2>目次</h2>
+      <a href="#map">0. 全体像と重要度</a>
+      <a href="#definitions">0.5 新出定義まとめ</a>
+      <a href="#vectors">1. 数ベクトルと演算</a>
+      <a href="#subspace">2. ベクトル空間・部分空間</a>
+      <a href="#independence">3. 一次独立・一次従属</a>
+      <a href="#basis">4. 基底・次元・座標</a>
+      <a href="#matrix">5. 行列と行列演算</a>
+      <a href="#block">6. ブロック分割</a>
+      <a href="#inverse">7. 正則行列・逆行列</a>
+      <a href="#row-reduction">8. 基本変形・階数</a>
+      <a href="#elementary">9. 基本行列</a>
+      <a href="#inverse-calc">10. 逆行列の計算</a>
+      <a href="#systems">11. 連立一次方程式</a>
+      <a href="#solution-space">12. 解の構造</a>
+      <a href="#determinant">13. 行列式</a>
+      <a href="#report-practice">13.5 レポート型問題</a>
+      <a href="#practice-plan">14. 勉強の進め方</a>
+    </aside>
+
+    <main>
+      <section id="map">
+        <div class="section-head">
+          <h2>0. 全体像と重要度</h2>
+          <p>線形代数Iは「ベクトルの空間」と「行列による計算」を、連立一次方程式と行列式へつなげる授業です。</p>
+        </div>
+        <div class="section-body">
+          <div class="grid-3">
+            <div class="panel">
+              <h3>最重要</h3>
+              <p>定義を使って判定し、手を動かして計算できる必要がある内容です。</p>
+              <ul>
+                <li>部分空間の判定</li>
+                <li>一次独立・一次従属</li>
+                <li>基底・次元</li>
+                <li>行基本変形、階数</li>
+                <li>連立一次方程式の解法</li>
+              </ul>
+            </div>
+            <div class="panel">
+              <h3>重要</h3>
+              <p>計算や証明を支える道具です。最重要テーマを理解するために必要です。</p>
+              <ul>
+                <li>数ベクトルの演算</li>
+                <li>行列の和・積・転置</li>
+                <li>正則行列と逆行列</li>
+                <li>基本行列</li>
+                <li>2次・3次の行列式</li>
+              </ul>
+            </div>
+            <div class="panel">
+              <h3>補足</h3>
+              <p>理解の見通しをよくする内容です。余裕があれば図や意味まで押さえると強いです。</p>
+              <ul>
+                <li>体 K, R, C の違い</li>
+                <li>ブロック行列</li>
+                <li>行列式の幾何学的意味</li>
+                <li>解空間の次元</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="figure">
+            <svg viewBox="0 0 980 240" role="img" aria-label="学習ロードマップ">
+              <defs>
+                <marker id="roadArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+                  <path d="M0 0 L10 5 L0 10 Z" fill="#17202a"></path>
+                </marker>
+              </defs>
+              <rect x="20" y="55" width="130" height="84" rx="8" fill="#eaf1ff" stroke="#9bb8f7"></rect>
+              <rect x="190" y="55" width="140" height="84" rx="8" fill="#e8f6f3" stroke="#8fcfc4"></rect>
+              <rect x="370" y="55" width="140" height="84" rx="8" fill="#fdebf2" stroke="#ed9fbc"></rect>
+              <rect x="550" y="55" width="130" height="84" rx="8" fill="#fff4df" stroke="#e7be78"></rect>
+              <rect x="720" y="55" width="130" height="84" rx="8" fill="#eaf7ee" stroke="#9ed0ac"></rect>
+              <rect x="410" y="170" width="150" height="50" rx="8" fill="#fff" stroke="#ccd6e3"></rect>
+              <line x1="150" y1="97" x2="190" y2="97" stroke="#17202a" stroke-width="2" marker-end="url(#roadArrow)"></line>
+              <line x1="330" y1="97" x2="370" y2="97" stroke="#17202a" stroke-width="2" marker-end="url(#roadArrow)"></line>
+              <line x1="510" y1="97" x2="550" y2="97" stroke="#17202a" stroke-width="2" marker-end="url(#roadArrow)"></line>
+              <line x1="680" y1="97" x2="720" y2="97" stroke="#17202a" stroke-width="2" marker-end="url(#roadArrow)"></line>
+              <line x1="615" y1="139" x2="520" y2="170" stroke="#17202a" stroke-width="2" marker-end="url(#roadArrow)"></line>
+              <text x="45" y="90" font-size="18" fill="#17202a">数ベクトル</text>
+              <text x="48" y="118" font-size="13" fill="#637083">足す・伸ばす</text>
+              <text x="214" y="90" font-size="18" fill="#17202a">部分空間</text>
+              <text x="206" y="118" font-size="13" fill="#637083">閉じている集合</text>
+              <text x="386" y="90" font-size="18" fill="#17202a">基底・次元</text>
+              <text x="390" y="118" font-size="13" fill="#637083">座標のものさし</text>
+              <text x="578" y="90" font-size="18" fill="#17202a">行列</text>
+              <text x="564" y="118" font-size="13" fill="#637083">計算の道具</text>
+              <text x="738" y="90" font-size="18" fill="#17202a">連立方程式</text>
+              <text x="742" y="118" font-size="13" fill="#637083">解を調べる</text>
+              <text x="433" y="201" font-size="16" fill="#17202a">行列式: 面積倍率</text>
+            </svg>
+            <div class="caption">この授業の主役は、抽象的な空間の考え方と、行列を使う具体的な計算です。</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="definitions">
+        <div class="section-head">
+          <h2>0.5 新出定義まとめ</h2>
+          <p>講義資料で新しく出てくる定義を、使いどころと一緒にまとめます。定義は暗記ではなく、問題を解くための道具として読むのが大切です。</p>
+        </div>
+        <div class="section-body">
+          <div class="definition-grid">
+            <div class="definition-item">
+              <strong>体 K</strong>
+              <p>足し算・引き算・掛け算・0でない数での割り算ができる数の世界。講義では主に <span class="formula">R</span> や <span class="formula">C</span> を考えます。</p>
+            </div>
+            <div class="definition-item">
+              <strong>数ベクトル</strong>
+              <p>数を縦または横に並べたもの。縦に並べると列ベクトル、横に並べると行ベクトルです。</p>
+            </div>
+            <div class="definition-item">
+              <strong>部分空間</strong>
+              <p>足しても、スカラー倍しても、同じ集合の中に残る集合。レポート1の中心テーマです。</p>
+            </div>
+            <div class="definition-item">
+              <strong>一次結合</strong>
+              <p><span class="formula">c1v1 + c2v2 + ... + ckvk</span> の形。生成、一次独立、基底のすべてにつながります。</p>
+            </div>
+            <div class="definition-item">
+              <strong>生成する</strong>
+              <p>与えられたベクトルの一次結合で、目的の空間全体を作れること。復習1の基底判定で使います。</p>
+            </div>
+            <div class="definition-item">
+              <strong>一次独立</strong>
+              <p>一次結合で0を作る方法が、全係数0しかないこと。無駄なベクトルがないという意味です。</p>
+            </div>
+            <div class="definition-item">
+              <strong>基底</strong>
+              <p>一次独立で、かつ空間を生成するベクトルの組。座標を作るためのものさしです。</p>
+            </div>
+            <div class="definition-item">
+              <strong>次元</strong>
+              <p>基底に含まれるベクトルの本数。空間に必要な独立方向の数です。</p>
+            </div>
+            <div class="definition-item">
+              <strong>正則行列</strong>
+              <p>逆行列を持つ正方行列。掃き出しで単位行列にできるか、行列式が0でないかで判定します。</p>
+            </div>
+            <div class="definition-item">
+              <strong>階数 rank</strong>
+              <p>行階段形にしたときの0でない行の本数。連立方程式の解の有無、自由変数、逆行列の有無に直結します。</p>
+            </div>
+            <div class="definition-item">
+              <strong>拡大係数行列</strong>
+              <p>連立方程式の係数と右辺を横に並べたもの。<span class="formula">[A | b]</span> と書きます。</p>
+            </div>
+            <div class="definition-item">
+              <strong>行列式 det</strong>
+              <p>正方行列に対応する数。2次元では面積倍率、3次元では体積倍率を表します。</p>
+            </div>
+            <div class="definition-item">
+              <strong>置換と符号</strong>
+              <p>数字の並べ替えと、その並べ替えが偶数回の交換か奇数回の交換かを表す考え方。復習5のテーマです。</p>
+            </div>
+            <div class="definition-item">
+              <strong>冪零行列</strong>
+              <p>何回か掛けると零行列になる行列。レポート3のように、<span class="formula">(I + A)^n</span> の計算を大幅に短くできます。</p>
+            </div>
+          </div>
+
+          <div class="panel exam wide-panel">
+            <h3>定義を問われたときの答案の作り方</h3>
+            <p>定義問題は「言葉を知っているか」だけでなく、「その定義を使って判定できるか」を見られます。例えば部分空間なら、零ベクトル、和、スカラー倍を確認します。一次独立なら、係数を置いて0になる条件を解きます。</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="vectors">
+        <div class="section-head">
+          <h2>1. 数ベクトルと演算</h2>
+          <p>講義資料 §1-1, §1-2。線形代数の最小単位は「数を縦に並べたもの」です。</p>
+        </div>
+        <div class="section-body">
+          <div class="panel terms">
+            <h3>用語説明</h3>
+            <table class="mini-table">
+              <tr><th>用語</th><th>意味</th></tr>
+              <tr><td>スカラー</td><td>ベクトルを何倍するかを表す普通の数。資料では <span class="formula">K = Q, R, C</span> などを使う。</td></tr>
+              <tr><td>数ベクトル</td><td><span class="formula">(a1, a2, ..., an)</span> のように、数を並べたもの。縦ベクトルと横ベクトルがある。</td></tr>
+              <tr><td>零ベクトル</td><td>すべての成分が 0 のベクトル。記号は <span class="formula">0</span>。</td></tr>
+              <tr><td>標準ベクトル</td><td><span class="formula">e1, e2, ..., en</span>。1つの成分だけが1で、他は0のベクトル。</td></tr>
+            </table>
+          </div>
+
+          <div class="importance">
+            <div class="rank important"><strong>重要: ベクトルの和とスカラー倍</strong><br>成分ごとに足す、成分ごとに同じ数を掛ける。以後の全計算の基本です。</div>
+            <div class="rank extra"><strong>補足: K 上のベクトル空間</strong><br><span class="formula">R</span> 上なら実数倍、<span class="formula">C</span> 上なら複素数倍まで許す、という意味です。</div>
+          </div>
+
+          <div class="grid-2">
+            <div class="panel">
+              <h3>基本計算</h3>
+              <div class="math-display">
+                <div class="math-line">
+                  <span>a =</span>
+                  <span class="matrix col"><span>a1</span><span>a2</span><span>...</span><span>an</span></span>
+                  <span>,</span>
+                  <span>b =</span>
+                  <span class="matrix col"><span>b1</span><span>b2</span><span>...</span><span>bn</span></span>
+                </div>
+                <div class="math-line">
+                  <span>a + b =</span>
+                  <span class="matrix col"><span>a1 + b1</span><span>a2 + b2</span><span>...</span><span>an + bn</span></span>
+                </div>
+                <div class="math-line">
+                  <span>c a =</span>
+                  <span class="matrix col"><span>c a1</span><span>c a2</span><span>...</span><span>c an</span></span>
+                </div>
+                <div class="math-note">縦に並べたものを「列ベクトル」と呼びます。成分ごとに同じ操作をします。</div>
+              </div>
+              <p>縦ベクトルか横ベクトルかを混ぜないことが大切です。講義資料では縦ベクトルを中心に扱います。</p>
+            </div>
+            <div class="panel intuition">
+              <h3>直感</h3>
+              <p>ベクトルは「矢印」と見ると分かりやすいです。和は矢印をつなぐこと、スカラー倍は矢印を伸ばす・縮める・反対向きにすることです。</p>
+              <div class="figure">
+                <svg viewBox="0 0 420 230" role="img" aria-label="ベクトルの和">
+                  <defs>
+                    <marker id="vArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+                      <path d="M0 0 L10 5 L0 10 Z" fill="#17202a"></path>
+                    </marker>
+                  </defs>
+                  <line x1="40" y1="190" x2="390" y2="190" stroke="#ccd6e3"></line>
+                  <line x1="40" y1="190" x2="40" y2="30" stroke="#ccd6e3"></line>
+                  <line x1="60" y1="170" x2="190" y2="90" stroke="#2f6fed" stroke-width="4" marker-end="url(#vArrow)"></line>
+                  <line x1="190" y1="90" x2="310" y2="130" stroke="#138a7e" stroke-width="4" marker-end="url(#vArrow)"></line>
+                  <line x1="60" y1="170" x2="310" y2="130" stroke="#b8325f" stroke-width="4" marker-end="url(#vArrow)"></line>
+                  <text x="123" y="84" fill="#2f6fed" font-size="18">a</text>
+                  <text x="253" y="94" fill="#138a7e" font-size="18">b</text>
+                  <text x="168" y="150" fill="#b8325f" font-size="18">a + b</text>
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="panel example">
+              <h3>一般形を小さい数で確認する</h3>
+              <p>一般形は、いきなり見ると記号の列に見えます。まず <span class="formula">n = 3</span> で試します。</p>
+              <div class="math-display">
+                <div class="math-line">
+                  <span>a =</span>
+                  <span class="matrix col"><span>1</span><span>2</span><span>3</span></span>
+                  <span>,</span>
+                  <span>b =</span>
+                  <span class="matrix col"><span>-1</span><span>0</span><span>4</span></span>
+                </div>
+                <div class="math-line">
+                  <span>a + b =</span>
+                  <span class="matrix col"><span>0</span><span>2</span><span>7</span></span>
+                </div>
+                <div class="math-line">
+                  <span>2a =</span>
+                  <span class="matrix col"><span>2</span><span>4</span><span>6</span></span>
+                </div>
+              </div>
+              <p class="why">本質は「各成分が独立に計算される」ことです。ベクトル全体を一度に理解しようとせず、1成分ずつ同じ操作が走っていると見ます。</p>
+            </div>
+            <div class="panel think">
+              <h3>添字の読み方</h3>
+              <p><span class="formula">a1, a2, ..., an</span> は「a が n 個ある」のではなく、「a の1番目、2番目、..., n番目の成分」という意味です。見た目が紛らわしいときは、頭の中で <span class="formula">a_1, a_2, ..., a_n</span> と読んでください。</p>
+              <div class="math-display">
+                <div class="math-line">
+                  <span>a =</span>
+                  <span class="matrix col"><span>5</span><span>-2</span><span>0</span></span>
+                </div>
+                <div class="math-note">このとき <span class="formula">a_1 = 5</span>, <span class="formula">a_2 = -2</span>, <span class="formula">a_3 = 0</span> です。</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel mistake">
+            <h3><span class="formula">T</span> のような初見記号</h3>
+            <p>参考書では <span class="formula">[1, 2, 3]^T</span> のような表記がよく出ます。右上の <span class="formula">T</span> は transpose の略で、「横に書いた行ベクトルを縦に並べ替える」という意味です。</p>
+            <div class="math-display">
+              <div class="math-line">
+                <span>[1, 2, 3]<sup>T</sup> =</span>
+                <span class="matrix col"><span>1</span><span>2</span><span>3</span></span>
+              </div>
+            </div>
+            <p class="why">このサイトでは、初学者が読みやすいように、できるだけ縦ベクトルは最初から縦に表示します。講義資料や試験問題で <span class="formula">^T</span> が出たら「縦に直す記号」と読んでください。</p>
+          </div>
+
+          <div class="panel warning">
+            <h3>高校数学からの違い</h3>
+            <p>高校では2次元や3次元の矢印が中心ですが、線形代数では <span class="formula">R^n</span> のように何次元でも同じルールで扱います。4次元以上は絵にしにくいだけで、計算ルールは同じです。</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="subspace">
+        <div class="section-head">
+          <h2>2. ベクトル空間・部分空間</h2>
+          <p>講義資料 §2-1。抽象度が上がる最初の山です。「足しても、何倍しても、集合から出ない」が合言葉です。</p>
+        </div>
+        <div class="section-body">
+          <div class="panel terms">
+            <h3>用語説明</h3>
+            <table class="mini-table">
+              <tr><th>用語</th><th>意味</th></tr>
+              <tr><td>ベクトル空間</td><td>ベクトルの和とスカラー倍ができ、その計算がいつもの法則を満たす集合。</td></tr>
+              <tr><td>部分空間</td><td>大きなベクトル空間の中にある、小さなベクトル空間。</td></tr>
+              <tr><td>閉じている</td><td>集合の中のものを計算しても、結果が集合の外へ出ないこと。</td></tr>
+              <tr><td>生成される空間</td><td>いくつかのベクトルの一次結合で作れる全ベクトルの集合。記号は <span class="formula">span(v1, ..., vk)</span>。</td></tr>
+            </table>
+          </div>
+
+          <div class="importance">
+            <div class="rank core"><strong>最重要: 部分空間の判定</strong><br>空でない集合 <span class="formula">W</span> が部分空間かどうかは、<span class="formula">u, v in W</span> なら <span class="formula">u+v in W</span>、<span class="formula">c u in W</span> が成り立つかで見る。</div>
+            <div class="rank important"><strong>重要: 原点を通るか</strong><br>部分空間なら必ず零ベクトルを含みます。図形でいえば、直線や平面は原点を通っている必要があります。</div>
+            <div class="rank extra"><strong>補足: 方程式で表された集合</strong><br><span class="formula">Ax = 0</span> の解集合は部分空間。<span class="formula">Ax = c</span> で <span class="formula">c != 0</span> なら一般には部分空間ではありません。</div>
+          </div>
+
+          <div class="grid-2">
+            <div class="panel intuition">
+              <h3>直感</h3>
+              <p>部分空間は「原点を中心に、足す・伸ばすをしても壊れない世界」です。原点を通る直線は伸ばしても同じ直線上に残ります。</p>
+              <div class="figure">
+                <svg viewBox="0 0 460 240" role="img" aria-label="部分空間とそうでない集合">
+                  <line x1="40" y1="200" x2="205" y2="50" stroke="#2f6fed" stroke-width="4"></line>
+                  <line x1="40" y1="200" x2="205" y2="200" stroke="#ccd6e3"></line>
+                  <line x1="40" y1="200" x2="40" y2="35" stroke="#ccd6e3"></line>
+                  <circle cx="40" cy="200" r="5" fill="#17202a"></circle>
+                  <text x="60" y="60" font-size="15" fill="#2f6fed">原点を通る直線</text>
+                  <text x="54" y="222" font-size="13" fill="#637083">部分空間</text>
+                  <line x1="255" y1="160" x2="425" y2="45" stroke="#b8325f" stroke-width="4"></line>
+                  <line x1="255" y1="200" x2="425" y2="200" stroke="#ccd6e3"></line>
+                  <line x1="255" y1="200" x2="255" y2="35" stroke="#ccd6e3"></line>
+                  <circle cx="255" cy="200" r="5" fill="#17202a"></circle>
+                  <text x="282" y="82" font-size="15" fill="#b8325f">原点を通らない</text>
+                  <text x="272" y="222" font-size="13" fill="#637083">部分空間ではない</text>
+                </svg>
+              </div>
+            </div>
+            <div class="panel">
+              <h3>部分空間チェック</h3>
+              <div class="checklist">
+                <div class="check"><span>✓</span><div>零ベクトルが入っているか。</div></div>
+                <div class="check"><span>✓</span><div>任意の2つを足しても集合内に残るか。</div></div>
+                <div class="check"><span>✓</span><div>任意のスカラー倍をしても集合内に残るか。</div></div>
+              </div>
+              <p class="footer-note">実際の答案では、3つを別々に書くより「任意の <span class="formula">a, b in K</span> と <span class="formula">u, v in W</span> に対して <span class="formula">a u + b v in W</span>」を示す形がスマートです。</p>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="panel example">
+              <h3>部分空間である集合</h3>
+              <p><span class="formula">W = {(x, y) in R^2 | y = 2x}</span> を考えます。これは原点を通る直線です。</p>
+              <span class="formula-block">(1, 2), (3, 6) in W
+(1, 2) + (3, 6) = (4, 8) も y = 2x を満たす
+5(1, 2) = (5, 10) も y = 2x を満たす</span>
+              <p class="why">足しても何倍しても条件 <span class="formula">y = 2x</span> が壊れないので、部分空間です。</p>
+            </div>
+            <div class="panel example">
+              <h3>部分空間ではない集合</h3>
+              <p><span class="formula">U = {(x, y) in R^2 | y = 2x + 1}</span> は、原点を通らない直線です。</p>
+              <span class="formula-block">(0, 1) in U
+2(0, 1) = (0, 2)
+しかし (0, 2) は y = 2x + 1 を満たさない</span>
+              <p class="why">「形が直線だから部分空間」ではありません。計算で集合の外へ出るなら、部分空間ではありません。</p>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="panel proof">
+              <h3>なぜ原点を含む必要があるのか</h3>
+              <p>部分空間なら、任意のベクトル <span class="formula">u</span> に対して <span class="formula">0u</span> も同じ集合に入る必要があります。ところが <span class="formula">0u</span> は必ず零ベクトルです。</p>
+              <p>つまり、部分空間である限り、零ベクトルは自動的に含まれます。原点を通らない直線や平面が部分空間になれないのはこのためです。</p>
+            </div>
+            <div class="panel exam">
+              <h3>狙われやすい点</h3>
+              <ul>
+                <li>条件式に右辺の定数がある集合が部分空間かどうか。</li>
+                <li><span class="formula">Ax = 0</span> と <span class="formula">Ax = b</span> の違い。</li>
+                <li>「零ベクトルを含む」だけで部分空間と判断するミス。足し算とスカラー倍でも閉じている必要があります。</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="independence">
+        <div class="section-head">
+          <h2>3. 一次独立・一次従属</h2>
+          <p>講義資料 §3-1。ベクトルの集まりに「無駄があるか」を調べるテーマです。</p>
+        </div>
+        <div class="section-body">
+          <div class="panel terms">
+            <h3>用語説明</h3>
+            <table class="mini-table">
+              <tr><th>用語</th><th>意味</th></tr>
+              <tr><td>一次結合</td><td><span class="formula">c1 v1 + c2 v2 + ... + ck vk</span> の形。</td></tr>
+              <tr><td>一次独立</td><td><span class="formula">c1 v1 + ... + ck vk = 0</span> の解が <span class="formula">c1 = ... = ck = 0</span> だけ。</td></tr>
+              <tr><td>一次従属</td><td>0でない係数を使って、ベクトルの一次結合を0にできる。</td></tr>
+              <tr><td>自明な解</td><td>全部の係数が0である解。</td></tr>
+            </table>
+          </div>
+
+          <div class="importance">
+            <div class="rank core"><strong>最重要: 定義を方程式にする</strong><br><span class="formula">c1 v1 + ... + ck vk = 0</span> を立て、係数 <span class="formula">c1, ..., ck</span> を未知数として解く。</div>
+            <div class="rank important"><strong>重要: ベクトル数が次元より多いと従属</strong><br><span class="formula">R^2</span> に3本以上、<span class="formula">R^3</span> に4本以上のベクトルがあると、必ず一次従属です。</div>
+          </div>
+
+          <div class="grid-2">
+            <div class="panel intuition">
+              <h3>直感</h3>
+              <p>一次独立は「どのベクトルも他のベクトルの組み合わせでは作れない」状態です。一次従属は「誰かが他のベクトルで再現できる」状態です。</p>
+              <div class="figure">
+                <svg viewBox="0 0 520 240" role="img" aria-label="一次独立と一次従属">
+                  <defs>
+                    <marker id="arrowInd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+                      <path d="M0 0 L10 5 L0 10 Z" fill="#17202a"></path>
+                    </marker>
+                  </defs>
+                  <line x1="55" y1="190" x2="195" y2="95" stroke="#2f6fed" stroke-width="4" marker-end="url(#arrowInd)"></line>
+                  <line x1="55" y1="190" x2="195" y2="170" stroke="#138a7e" stroke-width="4" marker-end="url(#arrowInd)"></line>
+                  <text x="84" y="45" font-size="17" fill="#17202a">一次独立</text>
+                  <text x="70" y="220" font-size="13" fill="#637083">方向が本質的に違う</text>
+                  <line x1="310" y1="190" x2="438" y2="95" stroke="#b8325f" stroke-width="4" marker-end="url(#arrowInd)"></line>
+                  <line x1="310" y1="190" x2="378" y2="140" stroke="#b56b00" stroke-width="4" marker-end="url(#arrowInd)"></line>
+                  <text x="334" y="45" font-size="17" fill="#17202a">一次従属</text>
+                  <text x="322" y="220" font-size="13" fill="#637083">同じ直線上に乗る</text>
+                </svg>
+              </div>
+            </div>
+            <div class="panel">
+              <h3>答案の型</h3>
+              <div class="steps">
+                <div class="step"><span class="formula">c1 v1 + ... + ck vk = 0</span> とおく。</div>
+                <div class="step">成分ごとに方程式へ分解する。</div>
+                <div class="step">連立方程式を解く。</div>
+                <div class="step">解が全部0だけなら一次独立。0以外があれば一次従属。</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="panel example">
+              <h3>一次従属の例</h3>
+              <p><span class="formula">v1 = (1, 2), v2 = (2, 4)</span> とします。</p>
+              <span class="formula-block">v2 = 2v1
+つまり 2v1 - v2 = 0</span>
+              <p class="why">0でない係数 <span class="formula">2, -1</span> を使って0を作れたので一次従属です。見た目では「同じ方向のベクトルが重複している」と考えます。</p>
+            </div>
+            <div class="panel example">
+              <h3>一次独立の例</h3>
+              <p><span class="formula">v1 = (1, 0), v2 = (1, 1)</span> とします。</p>
+              <span class="formula-block">c1(1, 0) + c2(1, 1) = (0, 0)
+成分で見ると
+c1 + c2 = 0
+c2 = 0
+よって c1 = 0, c2 = 0</span>
+              <p class="why">0を作る方法が「両方0倍」しかないので一次独立です。2本が同じ直線上にないことが本質です。</p>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="panel proof">
+              <h3>一次独立の定義の意味</h3>
+              <p><span class="formula">c1v1 + ... + ckvk = 0</span> を調べるのは、「ベクトル同士が打ち消し合って0を作れるか」を見るためです。</p>
+              <p>もし0でない係数で0を作れるなら、そのうち1本は他のベクトルの組み合わせで表せます。つまり、そのベクトルは新しい方向を増やしていません。</p>
+            </div>
+            <div class="panel mistake">
+              <h3>よくある勘違い</h3>
+              <ul>
+                <li>ベクトルに0成分が含まれるだけで一次従属だと思う。これは誤りです。</li>
+                <li>2本のベクトルの長さが違うから一次独立だと思う。方向が同じなら長さが違っても従属です。</li>
+                <li>答えだけ「一次独立」と書き、係数方程式を示さない。試験では根拠が必要です。</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="basis">
+        <div class="section-head">
+          <h2>4. 基底・次元・座標</h2>
+          <p>講義資料 §4-1。空間の中で「必要最小限のものさし」を作る章です。</p>
+        </div>
+        <div class="section-body">
+          <div class="panel terms">
+            <h3>用語説明</h3>
+            <table class="mini-table">
+              <tr><th>用語</th><th>意味</th></tr>
+              <tr><td>生成する</td><td>そのベクトルたちの一次結合で、空間内のすべてのベクトルを作れること。</td></tr>
+              <tr><td>基底</td><td>一次独立で、かつ空間全体を生成するベクトルの組。</td></tr>
+              <tr><td>次元</td><td>基底に含まれるベクトルの本数。</td></tr>
+              <tr><td>座標</td><td>基底を使ってベクトルを表したときの係数。</td></tr>
+            </table>
+          </div>
+
+          <div class="importance">
+            <div class="rank core"><strong>最重要: 基底 = 一次独立 + 生成</strong><br>片方だけでは足りません。独立だけなら空間全体を作れない可能性があり、生成だけなら無駄がある可能性があります。</div>
+            <div class="rank important"><strong>重要: 次元は基底の本数</strong><br>同じ空間なら、どの基底を選んでも本数は同じです。</div>
+            <div class="rank extra"><strong>補足: 多項式空間</strong><br>資料では多項式の空間も扱います。例えば次数1以下の多項式は <span class="formula">1, x</span> を基底にでき、次元は2です。</div>
+          </div>
+
+          <div class="grid-2">
+            <div class="panel intuition">
+              <h3>直感</h3>
+              <p>基底は「その空間の座標軸」です。標準基底でなくても、空間全体を一意に表せるものさしなら基底になります。</p>
+              <div class="figure">
+                <svg viewBox="0 0 460 260" role="img" aria-label="基底と座標">
+                  <defs>
+                    <marker id="basisArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+                      <path d="M0 0 L10 5 L0 10 Z" fill="#17202a"></path>
+                    </marker>
+                  </defs>
+                  <line x1="65" y1="210" x2="390" y2="210" stroke="#ccd6e3"></line>
+                  <line x1="65" y1="210" x2="65" y2="38" stroke="#ccd6e3"></line>
+                  <line x1="65" y1="210" x2="205" y2="150" stroke="#2f6fed" stroke-width="4" marker-end="url(#basisArrow)"></line>
+                  <line x1="65" y1="210" x2="118" y2="82" stroke="#138a7e" stroke-width="4" marker-end="url(#basisArrow)"></line>
+                  <line x1="65" y1="210" x2="312" y2="84" stroke="#b8325f" stroke-width="4" marker-end="url(#basisArrow)"></line>
+                  <path d="M205 150 L312 84 L118 82" fill="none" stroke="#9aa8ba" stroke-dasharray="6 5"></path>
+                  <text x="188" y="176" font-size="16" fill="#2f6fed">v1</text>
+                  <text x="100" y="72" font-size="16" fill="#138a7e">v2</text>
+                  <text x="322" y="82" font-size="16" fill="#b8325f">x</text>
+                  <text x="154" y="232" font-size="13" fill="#637083">x = a v1 + b v2 と表す</text>
+                </svg>
+              </div>
+            </div>
+            <div class="panel">
+              <h3>よく出る例</h3>
+              <table class="mini-table">
+                <tr><th>空間</th><th>基底の例</th><th>次元</th></tr>
+                <tr><td><span class="formula">R^2</span></td><td><span class="formula">e1=(1,0), e2=(0,1)</span></td><td>2</td></tr>
+                <tr><td><span class="formula">R^3</span></td><td><span class="formula">e1, e2, e3</span></td><td>3</td></tr>
+                <tr><td>原点を通る平面</td><td>平面上の独立な2本</td><td>2</td></tr>
+                <tr><td>次数1以下の多項式</td><td><span class="formula">1, x</span></td><td>2</td></tr>
+              </table>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="panel example">
+              <h3>標準基底でない基底</h3>
+              <p><span class="formula">R^2</span> では <span class="formula">(1, 0), (0, 1)</span> だけが基底ではありません。例えば <span class="formula">v1 = (1, 1), v2 = (1, -1)</span> も基底です。</p>
+              <span class="formula-block">x = (3, 1) を v1, v2 で表す:
+a(1, 1) + b(1, -1) = (3, 1)
+a + b = 3
+a - b = 1
+よって a = 2, b = 1
+(3, 1) = 2(1, 1) + 1(1, -1)</span>
+              <p class="why">基底とは「空間の中の点を表すためのものさし」です。標準の x 軸・y 軸でなくても、2本が独立なら別の斜めの座標軸として使えます。</p>
+            </div>
+            <div class="panel think">
+              <h3>基底を判定するときの順番</h3>
+              <ol>
+                <li>まず一次独立かを見る。無駄なベクトルがあるなら基底ではない。</li>
+                <li>次に空間全体を生成するかを見る。足りない方向があるなら基底ではない。</li>
+                <li><span class="formula">R^n</span> で n 本ある場合は、一次独立を示せば生成も従う。</li>
+              </ol>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="panel proof">
+              <h3>なぜ基底が「ものさし」になるのか</h3>
+              <p>基底が空間を生成するので、どんなベクトルも基底の一次結合で表せます。さらに基底が一次独立なので、その表し方は1通りに決まります。</p>
+              <p>「表せる」と「一意に表せる」がそろうため、基底の係数をそのベクトルの座標として使えます。</p>
+            </div>
+            <div class="panel exam">
+              <h3>狙われやすい点</h3>
+              <ul>
+                <li>与えられたベクトルの組が基底か判定する問題。</li>
+                <li>あるベクトルを指定された基底で座標表示する問題。</li>
+                <li>基底の本数から次元を答える問題。</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="matrix">
+        <div class="section-head">
+          <h2>5. 行列と行列演算</h2>
+          <p>講義資料 §5-1, §5-2。行列は、数を長方形に並べたものです。計算の順序に注意します。</p>
+        </div>
+        <div class="section-body">
+          <div class="panel terms">
+            <h3>用語説明</h3>
+            <table class="mini-table">
+              <tr><th>用語</th><th>意味</th></tr>
+              <tr><td><span class="formula">m x n</span> 行列</td><td>横に n 個、縦に m 個の成分を持つ行列。</td></tr>
+              <tr><td>行・列</td><td>横の並びが行、縦の並びが列。</td></tr>
+              <tr><td>零行列</td><td>すべての成分が0の行列。</td></tr>
+              <tr><td>単位行列</td><td>対角成分が1、その他が0の正方行列。記号は <span class="formula">I</span> または <span class="formula">E</span>。</td></tr>
+              <tr><td>転置行列</td><td>行と列を入れ替えた行列。記号は <span class="formula">A^T</span>。右上の <span class="formula">T</span> は transpose の略で「転置する」という意味。</td></tr>
+            </table>
+          </div>
+
+          <div class="importance">
+            <div class="rank important"><strong>重要: 行列の積は順序が大切</strong><br>一般に <span class="formula">AB != BA</span>。そもそも片方しか定義できない場合もあります。</div>
+            <div class="rank core"><strong>最重要: 行列積のサイズ</strong><br><span class="formula">(m x n)(n x p) = m x p</span>。内側のサイズが一致するときだけ掛けられます。</div>
+          </div>
+
+          <div class="grid-2">
+            <div class="panel">
+              <h3>行列積の見方</h3>
+              <span class="formula-block">A: m x n, B: n x p
+AB の (i, j) 成分
+= A の i 行 と B の j 列 の内積</span>
+              <p>「左の行」と「右の列」を合わせる、と覚えると計算ミスが減ります。</p>
+            </div>
+            <div class="panel intuition">
+              <h3>図解</h3>
+              <div class="figure">
+                <svg viewBox="0 0 540 240" role="img" aria-label="行列積のサイズ">
+                  <rect x="35" y="70" width="120" height="95" rx="6" fill="#eaf1ff" stroke="#9bb8f7"></rect>
+                  <rect x="220" y="55" width="110" height="125" rx="6" fill="#fff4df" stroke="#e7be78"></rect>
+                  <rect x="395" y="70" width="110" height="95" rx="6" fill="#e8f6f3" stroke="#8fcfc4"></rect>
+                  <text x="72" y="122" font-size="20" fill="#17202a">m x n</text>
+                  <text x="250" y="122" font-size="20" fill="#17202a">n x p</text>
+                  <text x="424" y="122" font-size="20" fill="#17202a">m x p</text>
+                  <text x="168" y="123" font-size="26" fill="#17202a">×</text>
+                  <text x="346" y="123" font-size="26" fill="#17202a">=</text>
+                  <line x1="112" y1="185" x2="275" y2="185" stroke="#b8325f" stroke-width="4"></line>
+                  <text x="160" y="214" font-size="15" fill="#b8325f">内側 n が一致</text>
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="panel example">
+              <h3>行列積は順序で変わる</h3>
+              <p>次の2つの行列で計算します。</p>
+              <div class="math-display">
+                <div class="math-line">
+                  <span>A =</span>
+                  <span class="matrix" style="--cols:2"><span>1</span><span>1</span><span>0</span><span>1</span></span>
+                  <span>,</span>
+                  <span>B =</span>
+                  <span class="matrix" style="--cols:2"><span>1</span><span>0</span><span>1</span><span>1</span></span>
+                </div>
+                <div class="math-line">
+                  <span>AB =</span>
+                  <span class="matrix" style="--cols:2"><span>2</span><span>1</span><span>1</span><span>1</span></span>
+                  <span>,</span>
+                  <span>BA =</span>
+                  <span class="matrix" style="--cols:2"><span>1</span><span>1</span><span>1</span><span>2</span></span>
+                </div>
+              </div>
+              <p class="why">数では <span class="formula">2 x 3 = 3 x 2</span> ですが、行列は「操作」なので順序が意味を持ちます。先に横へずらすか、先に傾けるかで結果が変わる、という感覚です。</p>
+            </div>
+            <div class="panel think">
+              <h3>積が定義できるか</h3>
+              <p><span class="formula">A</span> が <span class="formula">2 x 3</span>、<span class="formula">B</span> が <span class="formula">3 x 4</span> なら <span class="formula">AB</span> は計算できます。</p>
+              <div class="answer-line">結果のサイズは <span class="formula">2 x 4</span>。外側の数字が残り、内側の <span class="formula">3</span> は「足し合わせで消える」と見ると覚えやすいです。</div>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="panel proof">
+              <h3>行列積がこの形になる理由</h3>
+              <p>行列 <span class="formula">A</span> は「入力ベクトルを別のベクトルへ変える操作」と見られます。<span class="formula">ABx</span> は、まず <span class="formula">B</span> で <span class="formula">x</span> を動かし、その結果を <span class="formula">A</span> でさらに動かす、という2段階の操作です。</p>
+              <p>だから <span class="formula">AB</span> と <span class="formula">BA</span> は一般に同じではありません。操作の順番が違うからです。</p>
+            </div>
+            <div class="panel exam">
+              <h3>狙われやすい点</h3>
+              <ul>
+                <li><span class="formula">AB</span> は計算できるが <span class="formula">BA</span> は計算できない、というサイズ問題。</li>
+                <li><span class="formula">AB = BA</span> と勝手に入れ替えるミス。</li>
+                <li>転置で <span class="formula">(AB)^T = A^T B^T</span> と書くミス。正しくは <span class="formula">(AB)^T = B^T A^T</span>。</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="block">
+        <div class="section-head">
+          <h2>6. ブロック分割</h2>
+          <p>講義資料 §6-1。大きな行列を小さな行列のかたまりとして見る方法です。</p>
+        </div>
+        <div class="section-body">
+          <div class="panel terms">
+            <h3>用語説明</h3>
+            <table class="mini-table">
+              <tr><th>用語</th><th>意味</th></tr>
+              <tr><td>ブロック行列</td><td>行列をいくつかの長方形の小行列に分けたもの。</td></tr>
+              <tr><td>対角ブロック</td><td>正方行列の対角線上に置かれたブロック。</td></tr>
+              <tr><td>ブロック積</td><td>ブロックのサイズが合えば、普通の行列積と同じ形で計算できる。</td></tr>
+            </table>
+          </div>
+
+          <div class="grid-2">
+            <div class="panel">
+              <h3>扱い方</h3>
+              <p>ブロック分割は、計算を楽にするための見方です。分割線を入れたあと、各ブロックを1つの成分のように扱います。</p>
+              <span class="formula-block">[ A  B ] [ E  F ] = [ AE + BG   AF + BH ]
+[ C  D ] [ G  H ]   [ CE + DG   CF + DH ]</span>
+            </div>
+            <div class="panel intuition">
+              <h3>直感</h3>
+              <p>表計算ソフトで範囲をまとめて扱う感覚に近いです。個々の数字ではなく、まとまり同士の関係を見ると構造が見えます。</p>
+              <div class="figure">
+                <svg viewBox="0 0 420 230" role="img" aria-label="ブロック行列">
+                  <rect x="70" y="35" width="280" height="160" fill="#fff" stroke="#17202a" stroke-width="2"></rect>
+                  <line x1="210" y1="35" x2="210" y2="195" stroke="#b8325f" stroke-width="3"></line>
+                  <line x1="70" y1="115" x2="350" y2="115" stroke="#b8325f" stroke-width="3"></line>
+                  <text x="132" y="82" font-size="24" fill="#2f6fed">A</text>
+                  <text x="272" y="82" font-size="24" fill="#138a7e">B</text>
+                  <text x="132" y="162" font-size="24" fill="#b56b00">C</text>
+                  <text x="272" y="162" font-size="24" fill="#b8325f">D</text>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="inverse">
+        <div class="section-head">
+          <h2>7. 正則行列・逆行列</h2>
+          <p>講義資料 §7-1。行列にも「逆数」にあたるものがあります。ただし正方行列に限られます。</p>
+        </div>
+        <div class="section-body">
+          <div class="panel terms">
+            <h3>用語説明</h3>
+            <table class="mini-table">
+              <tr><th>用語</th><th>意味</th></tr>
+              <tr><td>正則行列</td><td>逆行列を持つ正方行列。</td></tr>
+              <tr><td>逆行列</td><td><span class="formula">A A^-1 = A^-1 A = I</span> を満たす行列。</td></tr>
+              <tr><td>特異行列</td><td>逆行列を持たない正方行列。</td></tr>
+            </table>
+          </div>
+
+          <div class="importance">
+            <div class="rank important"><strong>重要: 積の逆行列</strong><br><span class="formula">(AB)^-1 = B^-1 A^-1</span>。順序が逆になるのがポイントです。</div>
+            <div class="rank core"><strong>最重要: 逆行列は方程式を解く道具</strong><br><span class="formula">Ax = b</span> で <span class="formula">A</span> が正則なら <span class="formula">x = A^-1 b</span> と一意に解けます。</div>
+          </div>
+
+          <div class="panel intuition">
+            <h3>直感</h3>
+            <p>行列 <span class="formula">A</span> は空間を変形する操作です。逆行列 <span class="formula">A^-1</span> は、その変形を元に戻す操作です。押しつぶして面積を0にするような操作は、元に戻せないので逆行列がありません。</p>
+          </div>
+
+          <div class="grid-2">
+            <div class="panel example">
+              <h3>逆行列がある例</h3>
+              <p>次の <span class="formula">A</span> は、x方向を2倍、y方向を3倍する行列です。</p>
+              <div class="math-display">
+                <div class="math-line">
+                  <span>A =</span>
+                  <span class="matrix" style="--cols:2"><span>2</span><span>0</span><span>0</span><span>3</span></span>
+                </div>
+                <div class="math-line">
+                  <span>A^-1 =</span>
+                  <span class="matrix" style="--cols:2"><span>1/2</span><span>0</span><span>0</span><span>1/3</span></span>
+                </div>
+              </div>
+              <p class="why">2倍したものは1/2倍で戻せます。3倍したものは1/3倍で戻せます。だから逆行列があります。</p>
+            </div>
+            <div class="panel example">
+              <h3>逆行列がない例</h3>
+              <p>次の <span class="formula">B</span> は2列目が1列目の2倍です。</p>
+              <div class="math-display">
+                <div class="math-line">
+                  <span>B =</span>
+                  <span class="matrix" style="--cols:2"><span>1</span><span>2</span><span>2</span><span>4</span></span>
+                </div>
+                <div class="math-line"><span>det(B) = 1・4 - 2・2 = 0</span></div>
+                <div class="math-note">列ベクトル <span class="formula">(1, 2)</span> と <span class="formula">(2, 4)</span> は同じ直線上にあります。</div>
+              </div>
+              <p class="why">平面全体の情報が1本の方向に潰れます。潰れた後から元の位置を一意に復元できないので、逆行列はありません。</p>
+            </div>
+          </div>
+
+          <div class="panel exam">
+            <h3>逆行列で狙われる判断</h3>
+            <ul>
+              <li>正方行列でなければ逆行列は定義されない。</li>
+              <li><span class="formula">det(A) = 0</span> なら逆行列はない。</li>
+              <li>掃き出しで左側を単位行列にできれば、右側が逆行列になる。</li>
+              <li><span class="formula">(AB)^-1</span> は順序が逆になり、<span class="formula">B^-1 A^-1</span>。</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="row-reduction">
+        <div class="section-head">
+          <h2>8. 基本変形・階数</h2>
+          <p>講義資料 §8-1。行列計算の中核です。連立一次方程式、逆行列、階数がここでつながります。</p>
+        </div>
+        <div class="section-body">
+          <div class="panel terms">
+            <h3>用語説明</h3>
+            <table class="mini-table">
+              <tr><th>用語</th><th>意味</th></tr>
+              <tr><td>行基本変形</td><td>行の入れ替え、行の定数倍、別の行の定数倍を足す操作。</td></tr>
+              <tr><td>行階段形</td><td>主成分が右下へ階段状に並び、下に零行が集まった形。</td></tr>
+              <tr><td>主成分・ピボット</td><td>各行で最初に現れる0でない成分。</td></tr>
+              <tr><td>階数 rank</td><td>行階段形にしたときの0でない行の本数。独立な情報の数。<span class="formula">rank</span> は「順位・階級」という英語で、ここでは情報の多さを表す記号。</td></tr>
+            </table>
+          </div>
+
+          <div class="importance">
+            <div class="rank core"><strong>最重要: 掃き出し法</strong><br>左から順にピボットを作り、下を0にし、必要なら上も0にして標準形へ近づける。</div>
+            <div class="rank core"><strong>最重要: 階数</strong><br>階数は、連立方程式の解の有無・自由変数の数・逆行列の有無を判断する鍵です。</div>
+          </div>
+
+          <div class="grid-2">
+            <div class="panel">
+              <h3>行基本変形の3種類</h3>
+              <table class="mini-table">
+                <tr><th>操作</th><th>記号例</th><th>意味</th></tr>
+                <tr><td>行を入れ替える</td><td><span class="formula">Ri <-> Rj</span></td><td>方程式の順番を変えるだけ。</td></tr>
+                <tr><td>行を0でない数倍する</td><td><span class="formula">Ri -> c Ri</span></td><td>同じ方程式を定数倍する。</td></tr>
+                <tr><td>別の行を足す</td><td><span class="formula">Ri -> Ri + c Rj</span></td><td>一方の方程式を使って消去する。</td></tr>
+              </table>
+            </div>
+            <div class="panel intuition">
+              <h3>図解: 階段形</h3>
+              <div class="figure">
+                <svg viewBox="0 0 420 240" role="img" aria-label="行階段形">
+                  <rect x="90" y="35" width="240" height="160" fill="#fff" stroke="#17202a" stroke-width="2"></rect>
+                  <g fill="#eaf1ff" stroke="#9bb8f7">
+                    <rect x="90" y="35" width="60" height="40"></rect>
+                    <rect x="150" y="75" width="60" height="40"></rect>
+                    <rect x="210" y="115" width="60" height="40"></rect>
+                  </g>
+                  <g fill="#f4f6f9" stroke="#d8dee8">
+                    <rect x="150" y="35" width="180" height="40"></rect>
+                    <rect x="210" y="75" width="120" height="40"></rect>
+                    <rect x="270" y="115" width="60" height="40"></rect>
+                    <rect x="90" y="155" width="240" height="40"></rect>
+                  </g>
+                  <text x="108" y="62" font-size="18" fill="#2f6fed">p</text>
+                  <text x="168" y="102" font-size="18" fill="#2f6fed">p</text>
+                  <text x="228" y="142" font-size="18" fill="#2f6fed">p</text>
+                  <text x="129" y="222" font-size="13" fill="#637083">ピボットの本数 = rank</text>
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel practice">
+            <h3>計算で迷ったとき</h3>
+            <div class="steps">
+              <div class="step">左端の0でない列を探す。</div>
+              <div class="step">ピボットを上に持ってくる。必要なら行を入れ替える。</div>
+              <div class="step">ピボットを1にする。</div>
+              <div class="step">同じ列の下を0にする。</div>
+              <div class="step">次の行・次の列へ進む。</div>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="panel example">
+              <h3>階数が1になる例</h3>
+              <p>2行目が1行目の2倍なら、情報は1行分しかありません。</p>
+              <div class="math-display">
+                <div class="math-line">
+                  <span></span>
+                  <span class="matrix" style="--cols:3"><span>1</span><span>2</span><span>5</span><span>2</span><span>4</span><span>10</span></span>
+                </div>
+                <div class="math-line"><span>R2 -> R2 - 2R1</span></div>
+                <div class="math-line">
+                  <span></span>
+                  <span class="matrix" style="--cols:3"><span>1</span><span>2</span><span>5</span><span>0</span><span>0</span><span>0</span></span>
+                </div>
+              </div>
+              <p class="why">0でない行が1本だけなので rank は1です。行が2本あることではなく、独立な情報が何本あるかを数えます。</p>
+            </div>
+            <div class="panel example">
+              <h3>階数が2になる例</h3>
+              <p>2行目が1行目の倍数ではない場合、2本分の情報があります。</p>
+              <div class="math-display">
+                <div class="math-line">
+                  <span></span>
+                  <span class="matrix" style="--cols:3"><span>1</span><span>2</span><span>5</span><span>2</span><span>5</span><span>12</span></span>
+                </div>
+                <div class="math-line"><span>R2 -> R2 - 2R1</span></div>
+                <div class="math-line">
+                  <span></span>
+                  <span class="matrix" style="--cols:3"><span>1</span><span>2</span><span>5</span><span>0</span><span>1</span><span>2</span></span>
+                </div>
+              </div>
+              <p class="why">ピボットが2つ残るので rank は2です。連立方程式なら、2つの独立な条件があるという意味になります。</p>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="panel proof">
+              <h3>階数が「独立な情報の数」になる理由</h3>
+              <p>行基本変形は、方程式の情報を失わずに見やすい形へ変える操作です。階段形にしたとき、0でない行はそれぞれ新しい条件を1つ表します。</p>
+              <p>零行は「新しい条件を何も追加していない行」です。だから、0でない行の本数を数えると、独立な条件の数が分かります。</p>
+            </div>
+            <div class="panel exam">
+              <h3>狙われやすい点</h3>
+              <ul>
+                <li>行基本変形後の行列から rank を読む。</li>
+                <li>rank が列数と等しいかどうかで自由変数の有無を判断する。</li>
+                <li>正方行列で rank がサイズに等しいなら逆行列がある、と判断する。</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="elementary">
+        <div class="section-head">
+          <h2>9. 基本行列</h2>
+          <p>講義資料 §9-1。行基本変形を「左から行列を掛ける操作」として表す章です。</p>
+        </div>
+        <div class="section-body">
+          <div class="panel terms">
+            <h3>用語説明</h3>
+            <table class="mini-table">
+              <tr><th>用語</th><th>意味</th></tr>
+              <tr><td>基本行列</td><td>単位行列に1回だけ行基本変形を施した行列。</td></tr>
+              <tr><td>左から掛ける</td><td><span class="formula">P A</span> とすると、<span class="formula">A</span> の行に操作がかかる。</td></tr>
+              <tr><td>右から掛ける</td><td><span class="formula">A P</span> とすると、<span class="formula">A</span> の列に操作がかかる。</td></tr>
+            </table>
+          </div>
+
+          <div class="importance">
+            <div class="rank important"><strong>重要: 基本変形と行列積の対応</strong><br>行基本変形は、基本行列を左から掛けることと同じです。</div>
+            <div class="rank extra"><strong>補足: 正則性との関係</strong><br>基本行列はすべて正則です。基本変形で単位行列にできる行列は正則です。</div>
+          </div>
+
+          <div class="panel intuition">
+            <h3>直感</h3>
+            <p>行基本変形は手作業の操作に見えますが、実は「別の行列を掛けている」だけです。この視点が、逆行列の計算や階数の理論につながります。</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="inverse-calc">
+        <div class="section-head">
+          <h2>10. 行基本変形による逆行列の計算</h2>
+          <p>講義資料 §10-1。拡大行列 <span class="formula">[A | I]</span> を使って逆行列を求めます。</p>
+        </div>
+        <div class="section-body">
+          <div class="panel terms">
+            <h3>用語説明</h3>
+            <table class="mini-table">
+              <tr><th>用語</th><th>意味</th></tr>
+              <tr><td>拡大行列</td><td>2つの行列を横に並べたもの。逆行列計算では <span class="formula">[A | I]</span>。</td></tr>
+              <tr><td>掃き出し</td><td>行基本変形で左側を単位行列に近づけること。</td></tr>
+              <tr><td>正則判定</td><td>左側を単位行列にできれば正則。できなければ逆行列なし。</td></tr>
+            </table>
+          </div>
+
+          <div class="importance">
+            <div class="rank core"><strong>最重要: 計算手順</strong><br><span class="formula">[A | I] -> [I | A^-1]</span> を目指す。左側に行った操作が、そのまま右側にもかかる。</div>
+          </div>
+
+          <div class="grid-2">
+            <div class="panel">
+              <h3>手順</h3>
+              <div class="steps">
+                <div class="step"><span class="formula">[A | I]</span> を作る。</div>
+                <div class="step">行基本変形で左側の <span class="formula">A</span> を <span class="formula">I</span> にする。</div>
+                <div class="step">右側に残った行列を読む。</div>
+                <div class="step">左側に零行や矛盾が出て <span class="formula">I</span> にできなければ、逆行列なし。</div>
+              </div>
+            </div>
+            <div class="panel intuition">
+              <h3>図解</h3>
+              <div class="figure">
+                <svg viewBox="0 0 520 200" role="img" aria-label="逆行列計算">
+                  <rect x="40" y="60" width="150" height="80" rx="6" fill="#eaf1ff" stroke="#9bb8f7"></rect>
+                  <rect x="190" y="60" width="150" height="80" rx="6" fill="#fff4df" stroke="#e7be78"></rect>
+                  <rect x="345" y="60" width="130" height="80" rx="6" fill="#e8f6f3" stroke="#8fcfc4"></rect>
+                  <text x="86" y="108" font-size="22" fill="#17202a">A</text>
+                  <text x="251" y="108" font-size="22" fill="#17202a">I</text>
+                  <text x="381" y="108" font-size="22" fill="#17202a">A^-1</text>
+                  <line x1="190" y1="55" x2="190" y2="145" stroke="#17202a" stroke-width="2"></line>
+                  <path d="M80 155 C145 185, 260 185, 410 155" fill="none" stroke="#b8325f" stroke-width="3"></path>
+                  <text x="116" y="185" font-size="14" fill="#b8325f">左を I にする操作が右に残る</text>
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel example">
+            <h3>2×2で逆行列を作る</h3>
+            <p>次の <span class="formula">A</span> の逆行列を、左を単位行列にする操作で求めます。</p>
+            <div class="math-display">
+              <div class="math-line">
+                <span>A =</span>
+                <span class="matrix" style="--cols:2"><span>1</span><span>2</span><span>3</span><span>7</span></span>
+              </div>
+            </div>
+            <div class="math-display">
+              <div class="math-line">
+                <span>[A | I] =</span>
+                <span class="matrix" style="--cols:5"><span>1</span><span>2</span><span>|</span><span>1</span><span>0</span><span>3</span><span>7</span><span>|</span><span>0</span><span>1</span></span>
+              </div>
+              <div class="math-line"><span>R2 -> R2 - 3R1</span></div>
+              <div class="math-line">
+                <span></span>
+                <span class="matrix" style="--cols:5"><span>1</span><span>2</span><span>|</span><span>1</span><span>0</span><span>0</span><span>1</span><span>|</span><span>-3</span><span>1</span></span>
+              </div>
+              <div class="math-line"><span>R1 -> R1 - 2R2</span></div>
+              <div class="math-line">
+                <span></span>
+                <span class="matrix" style="--cols:5"><span>1</span><span>0</span><span>|</span><span>7</span><span>-2</span><span>0</span><span>1</span><span>|</span><span>-3</span><span>1</span></span>
+              </div>
+              <div class="math-line">
+                <span>A^-1 =</span>
+                <span class="matrix" style="--cols:2"><span>7</span><span>-2</span><span>-3</span><span>1</span></span>
+              </div>
+            </div>
+            <p class="why">左側に行った操作を右側にも同時に行うから、右側には「AをIに戻す操作」が残ります。これが逆行列です。</p>
+          </div>
+
+          <div class="grid-2">
+            <div class="panel proof">
+              <h3>なぜ右側が逆行列になるのか</h3>
+              <p>行基本変形は、左から基本行列を掛けることと同じです。左側の <span class="formula">A</span> を <span class="formula">I</span> にできたなら、何らかの行列 <span class="formula">P</span> によって <span class="formula">PA = I</span> になったということです。</p>
+              <p>同じ <span class="formula">P</span> は右側の <span class="formula">I</span> にも掛かるので、右側は <span class="formula">PI = P</span> になります。しかも <span class="formula">PA = I</span> なので、この <span class="formula">P</span> が <span class="formula">A^-1</span> です。</p>
+            </div>
+            <div class="panel mistake">
+              <h3>掃き出しで多いミス</h3>
+              <ul>
+                <li>左側だけ操作して、右側に同じ操作をし忘れる。</li>
+                <li>行を定数倍するとき、右側の全成分も同じ定数倍し忘れる。</li>
+                <li>途中で列基本変形を混ぜてしまう。逆行列計算では行基本変形で統一します。</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="systems">
+        <div class="section-head">
+          <h2>11. 連立一次方程式の解法</h2>
+          <p>講義資料 §11-1。行列を使うと、連立方程式を統一的に解けます。</p>
+        </div>
+        <div class="section-body">
+          <div class="panel terms">
+            <h3>用語説明</h3>
+            <table class="mini-table">
+              <tr><th>用語</th><th>意味</th></tr>
+              <tr><td>係数行列</td><td>未知数の係数だけを並べた行列 <span class="formula">A</span>。</td></tr>
+              <tr><td>拡大係数行列</td><td>右辺も含めて並べた <span class="formula">[A | b]</span>。</td></tr>
+              <tr><td>自由変数</td><td>値を自由に選べる未知数。</td></tr>
+              <tr><td>一般解</td><td>自由変数を含めて、解を全部表したもの。</td></tr>
+            </table>
+          </div>
+
+          <div class="importance">
+            <div class="rank core"><strong>最重要: 拡大係数行列を階段形にする</strong><br>方程式を直接いじる代わりに <span class="formula">[A | b]</span> を行基本変形します。</div>
+            <div class="rank core"><strong>最重要: 解の判定</strong><br><span class="formula">rank(A) = rank([A|b])</span> なら解あり。違えば解なし。</div>
+          </div>
+
+          <div class="grid-2">
+            <div class="panel">
+              <h3>解の数の判定</h3>
+              <table class="mini-table">
+                <tr><th>条件</th><th>結論</th></tr>
+                <tr><td><span class="formula">rank(A) != rank([A|b])</span></td><td>解なし</td></tr>
+                <tr><td><span class="formula">rank(A) = rank([A|b]) = n</span></td><td>解はただ1つ</td></tr>
+                <tr><td><span class="formula">rank(A) = rank([A|b]) < n</span></td><td>無数に解がある</td></tr>
+              </table>
+            </div>
+            <div class="panel intuition">
+              <h3>図解: 2本の直線</h3>
+              <div class="figure">
+                <svg viewBox="0 0 520 220" role="img" aria-label="連立方程式の解">
+                  <g transform="translate(0,0)">
+                    <line x1="50" y1="180" x2="190" y2="40" stroke="#2f6fed" stroke-width="4"></line>
+                    <line x1="45" y1="70" x2="200" y2="165" stroke="#138a7e" stroke-width="4"></line>
+                    <circle cx="117" cy="113" r="6" fill="#b8325f"></circle>
+                    <text x="64" y="205" font-size="13" fill="#637083">1点で交わる: 解1つ</text>
+                  </g>
+                  <g transform="translate(170,0)">
+                    <line x1="50" y1="70" x2="200" y2="150" stroke="#2f6fed" stroke-width="4"></line>
+                    <line x1="50" y1="102" x2="200" y2="182" stroke="#138a7e" stroke-width="4"></line>
+                    <text x="62" y="205" font-size="13" fill="#637083">平行: 解なし</text>
+                  </g>
+                  <g transform="translate(340,0)">
+                    <line x1="50" y1="70" x2="200" y2="150" stroke="#2f6fed" stroke-width="7"></line>
+                    <line x1="50" y1="70" x2="200" y2="150" stroke="#138a7e" stroke-width="3"></line>
+                    <text x="52" y="205" font-size="13" fill="#637083">重なる: 無数の解</text>
+                  </g>
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="panel example">
+              <h3>一意に解ける例</h3>
+              <p>次の連立方程式を考えます。</p>
+              <span class="formula-block">x + y = 5
+x - y = 1
+
+足すと 2x = 6 なので x = 3
+y = 2</span>
+              <p class="why">2本の直線が1点で交わるので、解は1つです。行列で見るとピボットが未知数2個ぶんあります。</p>
+            </div>
+            <div class="panel example">
+              <h3>解がない例</h3>
+              <span class="formula-block">x + y = 1
+x + y = 3</span>
+              <p>左辺は同じなのに右辺だけ違います。これは同時には成り立ちません。</p>
+              <p class="why">掃き出しをすると <span class="formula">0 = 2</span> のような矛盾が出ます。これが <span class="formula">rank(A) != rank([A|b])</span> の中身です。</p>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="panel proof">
+              <h3>rank 判定の意味</h3>
+              <p><span class="formula">rank(A)</span> は左辺の条件が持っている独立な情報の数です。<span class="formula">rank([A|b])</span> は右辺まで含めたときの独立な情報の数です。</p>
+              <p>右辺を付け足した途端に rank が増えるなら、左辺だけでは説明できない条件が右辺に入ったことになります。これが「矛盾」、つまり解なしです。</p>
+            </div>
+            <div class="panel mistake">
+              <h3>連立方程式で多いミス</h3>
+              <ul>
+                <li>自由変数を置いたあと、元の未知数に戻して一般解を書かない。</li>
+                <li><span class="formula">0 = 0</span> の行を矛盾だと思ってしまう。これは条件が消えただけです。</li>
+                <li><span class="formula">0 = 3</span> のような行を見落とす。これは即、解なしです。</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="solution-space">
+        <div class="section-head">
+          <h2>12. 連立一次方程式の解の構造</h2>
+          <p>講義資料 §12-1。同次方程式と非同次方程式の関係を押さえると、一般解が見やすくなります。</p>
+        </div>
+        <div class="section-body">
+          <div class="panel terms">
+            <h3>用語説明</h3>
+            <table class="mini-table">
+              <tr><th>用語</th><th>意味</th></tr>
+              <tr><td>同次方程式</td><td><span class="formula">Ax = 0</span>。</td></tr>
+              <tr><td>非同次方程式</td><td><span class="formula">Ax = b</span> で、右辺が0とは限らないもの。</td></tr>
+              <tr><td>特殊解</td><td><span class="formula">Ax = b</span> の解を1つだけ選んだもの。</td></tr>
+              <tr><td>解空間</td><td><span class="formula">Ax = 0</span> の解全体。これは部分空間になる。</td></tr>
+            </table>
+          </div>
+
+          <div class="importance">
+            <div class="rank core"><strong>最重要: 一般解の形</strong><br>非同次方程式の解全体は、<span class="formula">特殊解 + 同次方程式の一般解</span> で表せます。</div>
+            <div class="rank important"><strong>重要: 自由度</strong><br><span class="formula">Ax = 0</span> の解空間の次元は <span class="formula">n - rank(A)</span> です。</div>
+          </div>
+
+          <div class="panel intuition">
+            <h3>直感</h3>
+            <p><span class="formula">Ax = 0</span> の解は「動いても右辺を変えない方向」です。非同次方程式 <span class="formula">Ax = b</span> の解は、1つの解からその方向へ動かしたもの全部になります。</p>
+            <div class="figure">
+              <svg viewBox="0 0 560 250" role="img" aria-label="特殊解と同次解">
+                <defs>
+                  <marker id="solArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+                    <path d="M0 0 L10 5 L0 10 Z" fill="#17202a"></path>
+                  </marker>
+                </defs>
+                <line x1="60" y1="180" x2="500" y2="70" stroke="#2f6fed" stroke-width="4"></line>
+                <circle cx="270" cy="128" r="8" fill="#b8325f"></circle>
+                <line x1="270" y1="128" x2="390" y2="98" stroke="#138a7e" stroke-width="4" marker-end="url(#solArrow)"></line>
+                <line x1="270" y1="128" x2="150" y2="158" stroke="#138a7e" stroke-width="4" marker-end="url(#solArrow)"></line>
+                <text x="248" y="112" font-size="15" fill="#b8325f">特殊解</text>
+                <text x="335" y="84" font-size="15" fill="#138a7e">同次解の方向</text>
+                <text x="168" y="215" font-size="14" fill="#637083">解全体 = 1つの解 + 動ける方向</text>
+              </svg>
+            </div>
+          </div>
+
+          <div class="panel example">
+            <h3>特殊解 + 同次解を実感する</h3>
+            <p><span class="formula">x + y = 4</span> の解を全部表します。</p>
+            <span class="formula-block">特殊解の1つ: (4, 0)
+同次方程式 x + y = 0 の解: t(1, -1)
+
+よって一般解:
+(x, y) = (4, 0) + t(1, -1)
+= (4 + t, -t)</span>
+            <p class="why">まず1つだけ解を見つける。その後、「右辺を変えずに動ける方向」を全部足す。この2段階で一般解を作ります。</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="determinant">
+        <div class="section-head">
+          <h2>13. 行列式</h2>
+          <p>講義資料 §13-1, §13-2。講義範囲では2次・3次の行列式と幾何学的意味が中心です。</p>
+        </div>
+        <div class="section-body">
+          <div class="panel terms">
+            <h3>用語説明</h3>
+            <table class="mini-table">
+              <tr><th>用語</th><th>意味</th></tr>
+              <tr><td>行列式</td><td>正方行列に対して定まる数。記号は <span class="formula">det(A)</span> または <span class="formula">|A|</span>。</td></tr>
+              <tr><td>符号</td><td>行列式では、項にプラス・マイナスが付く。置換の偶奇と関係する。</td></tr>
+              <tr><td>面積倍率・体積倍率</td><td>行列が図形を何倍の面積・体積に変えるかを表す。</td></tr>
+            </table>
+          </div>
+
+          <div class="importance">
+            <div class="rank important"><strong>重要: 2次行列式</strong><br>2×2行列の成分を左上から <span class="formula">a, b, c, d</span> と置くと、<span class="formula">det(A) = ad - bc</span>。</div>
+            <div class="rank important"><strong>重要: 3次行列式</strong><br>展開式またはサラスの方法で計算します。符号の付け忘れに注意。</div>
+            <div class="rank extra"><strong>補足: 幾何学的意味</strong><br>絶対値は面積・体積の倍率、符号は向きが保たれるか反転するかを表します。</div>
+          </div>
+
+          <div class="grid-2">
+            <div class="panel">
+              <h3>公式</h3>
+              <span class="formula-block">2 x 2:
+| a  b |
+| c  d | = ad - bc
+
+3 x 3:
+| a11 a12 a13 |
+| a21 a22 a23 |
+| a31 a32 a33 |
+= a11 a22 a33 + a12 a23 a31 + a13 a21 a32
+  - a13 a22 a31 - a12 a21 a33 - a11 a23 a32</span>
+            </div>
+            <div class="panel intuition">
+              <h3>図解: 面積倍率</h3>
+              <div class="figure">
+                <svg viewBox="0 0 460 260" role="img" aria-label="行列式の面積">
+                  <defs>
+                    <marker id="detArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+                      <path d="M0 0 L10 5 L0 10 Z" fill="#17202a"></path>
+                    </marker>
+                  </defs>
+                  <line x1="55" y1="210" x2="400" y2="210" stroke="#ccd6e3"></line>
+                  <line x1="55" y1="210" x2="55" y2="35" stroke="#ccd6e3"></line>
+                  <polygon points="80,190 220,165 280,70 140,95" fill="#eaf1ff" stroke="#2f6fed" stroke-width="3"></polygon>
+                  <line x1="80" y1="190" x2="220" y2="165" stroke="#2f6fed" stroke-width="4" marker-end="url(#detArrow)"></line>
+                  <line x1="80" y1="190" x2="140" y2="95" stroke="#138a7e" stroke-width="4" marker-end="url(#detArrow)"></line>
+                  <text x="225" y="160" font-size="16" fill="#2f6fed">a1</text>
+                  <text x="118" y="92" font-size="16" fill="#138a7e">a2</text>
+                  <text x="150" y="132" font-size="15" fill="#17202a">面積 = |det A|</text>
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="panel example">
+              <h3>2次行列式の計算</h3>
+              <div class="math-display">
+                <div class="math-line">
+                  <span>A =</span>
+                  <span class="matrix" style="--cols:2"><span>2</span><span>1</span><span>3</span><span>4</span></span>
+                </div>
+                <div class="math-line"><span>det(A) = 2・4 - 1・3 = 5</span></div>
+              </div>
+              <p class="why"><span class="formula">det(A) = 5</span> は、この行列が面積を5倍にするという意味です。0でないので、逆行列もあります。</p>
+            </div>
+            <div class="panel example">
+              <h3>行列式が0になる計算</h3>
+              <div class="math-display">
+                <div class="math-line">
+                  <span>B =</span>
+                  <span class="matrix" style="--cols:2"><span>1</span><span>2</span><span>2</span><span>4</span></span>
+                </div>
+                <div class="math-line"><span>det(B) = 1・4 - 2・2 = 0</span></div>
+              </div>
+              <p class="why">2列目が1列目の2倍なので、平行四辺形の面積が0になります。公式だけでなく「2本が同じ方向に潰れている」と見るのが本質です。</p>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="panel proof">
+              <h3>2次行列式の公式の背景</h3>
+              <p>2本の列ベクトル <span class="formula">(a, c)</span>, <span class="formula">(b, d)</span> が作る平行四辺形の符号付き面積が <span class="formula">ad - bc</span> です。</p>
+              <p><span class="formula">ad</span> は「まっすぐ広がる面積」、<span class="formula">bc</span> は「斜めに重なって余分に数えた面積」を差し引く部分だと見ると、公式がただの暗記ではなくなります。</p>
+            </div>
+            <div class="panel exam">
+              <h3>狙われやすい点</h3>
+              <ul>
+                <li><span class="formula">ad + bc</span> と足してしまうミス。2次行列式は必ず <span class="formula">ad - bc</span>。</li>
+                <li>行列式が0なら、列ベクトルが一次従属であることを説明させる問題。</li>
+                <li>行列式が0でないなら、逆行列が存在することを判断させる問題。</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="panel warning">
+            <h3>つまずきやすい点</h3>
+            <p><span class="formula">det(A) = 0</span> は、列ベクトルが作る面積・体積が0になるという意味です。つまり、ベクトルが同じ直線や同じ平面に潰れていて、独立な広がりを作れていません。このとき行列は正則ではありません。</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="report-practice">
+        <div class="section-head">
+          <h2>13.5 レポート・復習型の重要問題</h2>
+          <p>レポート課題と復習問題で扱われている型から、期末試験でも狙われやすいものを選び、次に自分で解けるように手順化します。</p>
+        </div>
+        <div class="section-body">
+          <div class="problem-card">
+            <span class="source-badge">レポート1型: 部分空間判定</span>
+            <h3>連立同次条件で定まる集合が部分空間か判定する</h3>
+            <p>次の集合を考えます。</p>
+            <div class="math-display">
+              <div class="math-line">
+                <span>W = {</span>
+                <span class="matrix col"><span>x</span><span>y</span><span>z</span></span>
+                <span>in R^3 | 2x + 3y - z = 0, x - 2y + 3z = 0 }</span>
+              </div>
+            </div>
+            <div class="solution-flow">
+              <div class="step">零ベクトルを代入する。どちらの式も0になるので、零ベクトルは入る。</div>
+              <div class="step">2つの解 <span class="formula">u, v</span> を足す。式は線形なので、左辺もそれぞれ足され、0 + 0 = 0 になる。</div>
+              <div class="step">解 <span class="formula">u</span> を <span class="formula">c</span> 倍する。左辺も <span class="formula">c</span> 倍され、<span class="formula">c・0 = 0</span> になる。</div>
+              <div class="step">よって和とスカラー倍で閉じているので、<span class="formula">W</span> は部分空間。</div>
+            </div>
+            <div class="panel mistake wide-panel">
+              <h3>同じ形でも右辺が0でないと危ない</h3>
+              <p><span class="formula">2x + 3y - z = 1</span> のように右辺が0でない条件では、零ベクトルが入らないので部分空間ではありません。レポート1でもこの違いが問われています。</p>
+            </div>
+          </div>
+
+          <div class="problem-card">
+            <span class="source-badge">復習1型: 基底判定</span>
+            <h3>3本のベクトルが R^3 の基底か判定する</h3>
+            <p>次の3本が基底かを判定します。</p>
+            <div class="math-display">
+              <div class="math-line">
+                <span>v1 =</span><span class="matrix col"><span>1</span><span>0</span><span>1</span></span>
+                <span>v2 =</span><span class="matrix col"><span>0</span><span>1</span><span>1</span></span>
+                <span>v3 =</span><span class="matrix col"><span>1</span><span>0</span><span>0</span></span>
+              </div>
+            </div>
+            <div class="solution-flow">
+              <div class="step"><span class="formula">c1v1 + c2v2 + c3v3 = 0</span> と置く。</div>
+              <div class="step">成分ごとに見ると、<span class="formula">c1 + c3 = 0</span>, <span class="formula">c2 = 0</span>, <span class="formula">c1 + c2 = 0</span>。</div>
+              <div class="step"><span class="formula">c2 = 0</span> かつ <span class="formula">c1 + c2 = 0</span> より <span class="formula">c1 = 0</span>。さらに <span class="formula">c1 + c3 = 0</span> より <span class="formula">c3 = 0</span>。</div>
+              <div class="step">全部0しかないので一次独立。R^3 の3本の一次独立なベクトルだから基底。</div>
+            </div>
+            <p class="why">基底判定は「一次独立」と「生成」の両方が必要ですが、R^3 で3本ある場合は、一次独立を示せば自動的に生成も分かります。</p>
+          </div>
+
+          <div class="problem-card">
+            <span class="source-badge">レポート3型: 冪零行列と二項定理</span>
+            <h3><span class="formula">(I + A)^10</span> を短く計算する</h3>
+            <p>行列 <span class="formula">A</span> が <span class="formula">A^3 = O</span> を満たすとき、<span class="formula">(I + A)^10</span> は全部展開する必要がありません。</p>
+            <div class="solution-flow">
+              <div class="step">普通の二項定理の形を思い出す。<span class="formula">(1 + x)^10 = 1 + 10x + 45x^2 + ...</span>。</div>
+              <div class="step">行列でも <span class="formula">I</span> と <span class="formula">A</span> は可換なので、同じ形で展開できる。</div>
+              <div class="step"><span class="formula">A^3 = O</span> なら、<span class="formula">A^3, A^4, ...</span> は全部0。</div>
+              <div class="step">したがって <span class="formula">(I + A)^10 = I + 10A + 45A^2</span>。</div>
+            </div>
+            <div class="panel exam wide-panel">
+              <h3>テストでの狙われ方</h3>
+              <p>巨大なべき乗をまともに10回掛ける問題ではありません。「冪零だから途中で消える」と気づけるかが狙いです。</p>
+            </div>
+          </div>
+
+          <div class="problem-card">
+            <span class="source-badge">復習2型: AB = BA となる行列</span>
+            <h3>可換条件を成分比較で求める</h3>
+            <p>2次正方行列 <span class="formula">A</span> に対して、<span class="formula">AB = BA</span> となる <span class="formula">B</span> を求める型です。</p>
+            <div class="math-display">
+              <div class="math-line">
+                <span>A =</span>
+                <span class="matrix" style="--cols:2"><span>1</span><span>2</span><span>0</span><span>1</span></span>
+                <span>,</span>
+                <span>B =</span>
+                <span class="matrix" style="--cols:2"><span>a</span><span>b</span><span>c</span><span>d</span></span>
+              </div>
+            </div>
+            <div class="solution-flow">
+              <div class="step">まず <span class="formula">B</span> を未知数入りの一般形で置く。</div>
+              <div class="step"><span class="formula">AB</span> と <span class="formula">BA</span> をそれぞれ計算する。</div>
+              <div class="step">対応する成分を比較して、<span class="formula">c = 0</span>, <span class="formula">a = d</span> のような条件を得る。</div>
+              <div class="step">条件を <span class="formula">B</span> に戻して、答えを行列の形で書く。</div>
+            </div>
+            <div class="math-display">
+              <div class="math-line">
+                <span>答えの形:</span>
+                <span>B =</span>
+                <span class="matrix" style="--cols:2"><span>a</span><span>b</span><span>0</span><span>a</span></span>
+                <span>(a, b は任意)</span>
+              </div>
+            </div>
+            <p class="why">ポイントは、<span class="formula">AB = BA</span> を「行列全体が等しい」と見るのではなく、「対応する成分がすべて等しい」と分解することです。</p>
+          </div>
+
+          <div class="problem-card">
+            <span class="source-badge">レポート4型: 行基本変形と階数</span>
+            <h3>行列を行基本変形して rank を読む</h3>
+            <p>レポート4では、行基本変形で簡単な形に直し、rank や正則行列 <span class="formula">P</span> を求める型が扱われています。</p>
+            <div class="math-display">
+              <div class="math-line">
+                <span>行基本変形の目標:</span>
+                <span class="matrix" style="--cols:4"><span>1</span><span>*</span><span>*</span><span>*</span><span>0</span><span>1</span><span>*</span><span>*</span><span>0</span><span>0</span><span>1</span><span>*</span></span>
+              </div>
+              <div class="math-note">ピボットが3つあれば rank は3です。</div>
+            </div>
+            <div class="solution-flow">
+              <div class="step">左上からピボットを作る。必要なら行を入れ替える。</div>
+              <div class="step">ピボットの下を0にする。計算の目的は「見やすい階段」を作ること。</div>
+              <div class="step">0でない行の数を数える。これが rank。</div>
+              <div class="step">行基本変形を記録すると、それらをまとめた行列が <span class="formula">P</span> になり、<span class="formula">PA = B</span> と表せる。</div>
+            </div>
+          </div>
+
+          <div class="problem-card">
+            <span class="source-badge">復習4型: パラメータ付き連立方程式</span>
+            <h3>解が存在するための条件を求める</h3>
+            <p>パラメータ <span class="formula">a, b</span> を含む連立方程式では、掃き出し後に出る矛盾行を見ます。</p>
+            <div class="math-display">
+              <div class="math-line">
+                <span>掃き出し後に</span>
+                <span class="matrix" style="--cols:5"><span>1</span><span>0</span><span>*</span><span>*</span><span>| a</span><span>0</span><span>1</span><span>*</span><span>*</span><span>| b</span><span>0</span><span>0</span><span>0</span><span>0</span><span>| -3a</span><span>0</span><span>0</span><span>0</span><span>0</span><span>| -4a+b-2</span></span>
+              </div>
+            </div>
+            <div class="solution-flow">
+              <div class="step">零行の右辺に注目する。左辺が全部0なら、右辺も0でないといけない。</div>
+              <div class="step"><span class="formula">-3a = 0</span> より <span class="formula">a = 0</span>。</div>
+              <div class="step"><span class="formula">-4a + b - 2 = 0</span> に <span class="formula">a = 0</span> を入れて、<span class="formula">b = 2</span>。</div>
+              <div class="step">したがって解が存在する条件は <span class="formula">a = 0, b = 2</span>。</div>
+            </div>
+            <p class="why">このタイプは、最後まで未知数を解くことよりも「矛盾が出ない条件」を読むことが本質です。</p>
+          </div>
+
+          <div class="problem-card">
+            <span class="source-badge">復習5型: 置換の符号</span>
+            <h3>置換を互換の積で表し、符号を求める</h3>
+            <p>例えば、上段を <span class="formula">1,2,3,4,5</span>、下段を <span class="formula">5,4,2,1,3</span> とする置換を考えます。</p>
+            <div class="solution-flow">
+              <div class="step">置換は「数字の並べ替え」です。互換は2つの数字だけを入れ替える操作です。</div>
+              <div class="step">互換の個数が偶数なら符号は <span class="formula">+1</span>、奇数なら <span class="formula">-1</span>。</div>
+              <div class="step">レポートの解答例では偶数個の互換で表せるため、<span class="formula">sgn(σ) = 1</span>。</div>
+            </div>
+            <div class="panel mistake wide-panel">
+              <h3>符号で多い勘違い</h3>
+              <p>互換の分解方法は1通りではありません。しかし、互換の個数が偶数か奇数かは変わりません。だから符号は一意に決まります。</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="practice-plan">
+        <div class="section-head">
+          <h2>14. 勉強の進め方</h2>
+          <p>復習・レポート解答例は、定義の確認よりも「計算手順の定着」に使うのが効果的です。</p>
+        </div>
+        <div class="section-body">
+          <div class="grid-2">
+            <div class="panel practice">
+              <h3>優先順</h3>
+              <ol>
+                <li>部分空間、一次独立、基底、次元の定義を言えるようにする。</li>
+                <li>行基本変形を、途中式を省略せずに書けるようにする。</li>
+                <li>階数から、逆行列の有無と連立方程式の解の数を判断する。</li>
+                <li>2次・3次の行列式を符号まで正確に計算する。</li>
+                <li>行列式の意味、解空間の意味を図で説明できるようにする。</li>
+              </ol>
+            </div>
+            <div class="panel">
+              <h3>演習テーマの対応</h3>
+              <table class="mini-table">
+                <tr><th>演習で確認したいこと</th><th>見る章</th></tr>
+                <tr><td>部分空間かどうか</td><td>2. ベクトル空間・部分空間</td></tr>
+                <tr><td>一次独立・基底・次元</td><td>3-4. 一次独立、基底・次元</td></tr>
+                <tr><td>行列計算・ブロック計算</td><td>5-6. 行列、ブロック分割</td></tr>
+                <tr><td>逆行列を掃き出しで求める</td><td>8-10. 基本変形、逆行列計算</td></tr>
+                <tr><td>連立方程式の解の有無・一般解</td><td>11-12. 連立方程式、解の構造</td></tr>
+                <tr><td>置換・符号・行列式</td><td>13. 行列式</td></tr>
+              </table>
+            </div>
+          </div>
+
+          <div class="panel supplement">
+            <h3>このサイトの使い方</h3>
+            <p>まず目次から苦手な章へ飛び、「用語説明」だけを読んでから重要度欄を確認してください。そのあと図解と手順を見て、最後に講義資料・復習問題で同じ型を解くと定着しやすいです。</p>
+          </div>
+
+          <div class="panel think">
+            <h3>読むだけで終わらせないための問い</h3>
+            <ol>
+              <li>その概念は「何を判定するため」にあるのか。</li>
+              <li>最小の例、つまり <span class="formula">R^2</span> や <span class="formula">2 x 2</span> で試すとどうなるか。</li>
+              <li>うまくいく例だけでなく、失敗する例は何か。</li>
+              <li>公式の各記号は、具体例ではどの数字に対応するか。</li>
+              <li>答えを出したあと、その答えが意味として自然かを図で説明できるか。</li>
+            </ol>
+            <p class="why">線形代数は、定義を暗記するだけだと分かった気になりやすい科目です。毎回「小さい例」「反例」「図の意味」に戻すと、計算と概念がつながります。</p>
+          </div>
+
+          <p class="footer-note">注: PDFの日本語本文は抽出時に一部文字化けしたため、章構成・数式・ページ画像の確認をもとに、線形代数Iの標準的な説明を補って再構成しています。</p>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
